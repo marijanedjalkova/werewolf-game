@@ -1,0 +1,11 @@
+# Ignored files
+
+/Library/  
+/Temp/  
+/Build/ 
+
+*.pidb
+*.sln
+*.userprefs
+*.csproj
+*.orig
