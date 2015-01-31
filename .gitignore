@@ -1,8 +1,8 @@
 # Ignored files
 
-/Library/  
-/Temp/  
-/Build/ 
+Library/  
+Temp/  
+Build/ 
 
 *.pidb
 *.sln
