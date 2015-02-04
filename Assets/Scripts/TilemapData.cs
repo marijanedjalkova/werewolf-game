@@ -1,35 +1,60 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class TilemapData : MonoBehaviour {
 
-	public int x;
-	public int y;
+	public int sizeX = 0;
+	public int sizeY = 0;
 
 	public GameObject tileObject;
 
-	private ArrayList tiles;
+	public TileData[,] tiles;
 
 	// Use this for initialization
 	void Start () {
 	
-		tiles = new ArrayList();
+		tiles = new TileData[sizeX, sizeY];
 
-		for(int i=0; i < x; i++) {
-			for(int j=0; j < y; j++) {
-				GameObject tileTemp = Instantiate(tileObject) as GameObject;
-				tileTemp.transform.parent = this.transform;
-				tileTemp.GetComponent<TileData>().SetLocation(i, j);
-				tiles.Add (tileTemp);
-
+		// Create the tile objects
+		for(int x = 0; x < sizeX; x++) {
+			for(int y = 0; y < sizeY; y++) {
+				GameObject currentTile = Instantiate(tileObject) as GameObject;
+				currentTile.transform.parent = this.transform;
+				tiles[x,y] = currentTile.GetComponent<TileData>();
+				tiles[x,y].SetLocation(x, y);
 			}
-
 		}
 
+		for(int x = 0; x < sizeX; x++) {
+			for(int y = 0; y < sizeY; y++) {
+
+				// Left Neighbour
+				if (x-1 >= 0){
+					tiles[x,y].AddNeighbour (tiles[x-1,y]);
+				}
+
+				// Left Neighbour
+				if (x+1 < sizeX){
+					tiles[x,y].AddNeighbour (tiles[x+1,y]);
+				}
+
+				// Below Neighbour
+				if (y-1 >= 0){
+					tiles[x,y].AddNeighbour (tiles[x,y-1]);
+				}
+
+				// Above Neighbour
+				if (y+1 < sizeY){
+					tiles[x,y].AddNeighbour (tiles[x,y+1]);
+				}
+			}
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+
+	List<TileData> GetPath(TileData from, TileData to){
+		List<TileData> path = new List<TileData>();
+		return path;
 	}
+
 }
