@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class TileData : MonoBehaviour {
 
-	public float x;
-	public float y;
-	public bool pathable;
+	public int x;
+	public int y;
+	public bool pathable = true;
 
 	public List<TileData> neighbours;
 
@@ -19,7 +19,11 @@ public class TileData : MonoBehaviour {
 	
 	}
 
-	public void SetLocation(float x, float y){
+	public void SetPathable(bool p){
+		pathable = p;
+	}
+
+	public void SetLocation(int x, int y){
 		this.x = x;
 		this.y = y;
 		this.transform.localPosition = new Vector3(x, y, 0.0f);
