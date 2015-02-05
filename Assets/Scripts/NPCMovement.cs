@@ -9,8 +9,7 @@ public class NPCMovement : MonoBehaviour {
 
 	public float speed = 1;
 
-	public float velocityX = 0;
-	public float velocityY = 0;
+	public Vector3 velocity;
 
 	public float moveChance = 99;
 
@@ -19,18 +18,21 @@ public class NPCMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
+		velocity = new Vector3 (0, 0, 0);
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+		float distanceToTravel = 0.0f;
+
 		if (currentTile == null){
 			currentTile = tilemap.GetTile ((int)this.transform.position.x,
 			                               (int)this.transform.position.y);
 		}
 
-		this.velocityX = 0;
-		this.velocityY = 0;
+		this.velocity = new Vector3 (0, 0, 0);
 
 		// If the currentPath is empty, there is a chance every frame to start to move to a random tile. (moveChance%)
 		// Currently hardcoded to move on the map I made, but could be generalized to allow the NPC
@@ -56,24 +58,29 @@ public class NPCMovement : MonoBehaviour {
 
 			// Direction and distance to the next point.
 			Vector3 directionToDestination = nextDestination-currentPosition;
+			distanceToTravel = directionToDestination.magnitude;
 
 			// If the NPC is close enough, remove the point from the queue.
 			if (directionToDestination.magnitude < 0.1f){
 				this.currentTile = this.currentPath[nextIndex];
 				this.currentPath.RemoveAt(nextIndex);
-				this.velocityX = 0;
-				this.velocityY = 0;
+				this.velocity = new Vector3 (0, 0, 0);
 
 			} else {
 
 				// Set the npc to move towards the destination and not overshoot it.
-				this.velocityX = speed*(directionToDestination.normalized.x);
-				this.velocityY = speed*(directionToDestination.normalized.y);
+				this.velocity.x = speed*(directionToDestination.normalized.x);
+				this.velocity.y = speed*(directionToDestination.normalized.y);
+
 			}
 		}
 
 		// Move the NPC.
-		this.transform.Translate(new Vector3(this.velocityX, this.velocityY, 0)*Time.deltaTime);
+		if (speed * Time.deltaTime > distanceToTravel) {
+			this.transform.Translate (this.velocity.normalized * distanceToTravel);
+		} else {
+			this.transform.Translate (this.velocity * Time.deltaTime);
+		}
 
 	}
 
