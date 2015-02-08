@@ -1,27 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class TilemapData : MonoBehaviour {
+public class Tilemap : MonoBehaviour {
 
 	public int sizeX = 0;
 	public int sizeY = 0;
 
 	public GameObject tileObject;
 
-	public TileData[,] tiles;
+	public Tile[,] tiles;
 
+	public Sprite pathable;
+	public Sprite unpathable;
+	
 	// Use this for initialization
 	void Start () {
 	
-		tiles = new TileData[sizeX, sizeY];
+	}
+
+	public void SetTile(GameObject tile){
+		this.tileObject = tile;
+	}
+
+	public void GenerateTilemap(int sizeX, int sizeY){
+
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+
+		tiles = new Tile[sizeX, sizeY];
+
+		for(int x = 0; x < sizeX;x++){
+			for(int y = 0; y < sizeY; y++) {
+				if (x == 0 || x == sizeX-1 ||
+				    y == 0 || y == sizeY-1){
+					GameObject currentTile = Instantiate(tileObject) as GameObject;
+					currentTile.transform.parent = this.transform;
+					tiles[x,y] = currentTile.GetComponent<Tile>();
+					tiles[x,y].SetLocation(x, y);
+					tiles[x,y].SetSprite (unpathable);
+					tiles[x,y].SetPathable (false);
+				}
+			}
+					
+		}
 
 		// Create the tile objects
-		for(int x = 0; x < sizeX; x++) {
-			for(int y = 0; y < sizeY; y++) {
+		for(int x = 1; x < sizeX-1; x++) {
+			for(int y = 1; y < sizeY-1; y++) {
 				GameObject currentTile = Instantiate(tileObject) as GameObject;
 				currentTile.transform.parent = this.transform;
-				tiles[x,y] = currentTile.GetComponent<TileData>();
+				tiles[x,y] = currentTile.GetComponent<Tile>();
 				tiles[x,y].SetLocation(x, y);
+				tiles[x,y].SetSprite (pathable);
 				tiles[x,y].SetPathable (true);
 			}
 		}
@@ -74,58 +104,35 @@ public class TilemapData : MonoBehaviour {
 		}
 	}
 
-	public List<TileData> GetRandomPath(TileData from, TileData minTile, TileData maxTile){
-
-		List<TileData> path = new List<TileData>();
-
-		// If there is no origin tile, there can be no path.
-		if (!from){
-				return path;
-		}
-
-		// Initialize the destination as the original tile.
-		int x = from.x;
-		int y = from.y;
-
-		// Find a random pathable location in the specified range that is not the original tile.
-		while(x == from.x || y == from.y || tiles[x,y].pathable == false){
-			x = (int)Random.Range (minTile.x, maxTile.x);
-			y = (int)Random.Range (minTile.y, maxTile.y);
-		}
-
-		return GetPath (from, tiles[x,y]);
-
-	}
-
-	public List<TileData> GetPath(TileData from, TileData to){
+	public List<Tile> GetPath(Tile from, Tile to){
 		// Based on the A* algorithm from the A* wikipedia page.
 		// http://en.wikipedia.org/wiki/A*_search_algorithm
 
 		// Tiles that have already been visied.
-		List<TileData> closedTiles = new List<TileData>();
+		List<Tile> closedTiles = new List<Tile>();
 
 		// Tiles that are to be visited.
-		List<TileData> openTiles = new List<TileData>();
+		List<Tile> openTiles = new List<Tile>();
 		openTiles.Add (from);
 
 		// Calculated cost for path distance to tiles.
-		Dictionary<TileData, float> actualCost = new Dictionary<TileData, float>();
+		Dictionary<Tile, float> actualCost = new Dictionary<Tile, float>();
 		actualCost.Add (from, 0.0f);
 
 		// Estimated cost for path distance to tiles.
-		Dictionary<TileData, float> estimateCost = new Dictionary<TileData, float>();
+		Dictionary<Tile, float> estimateCost = new Dictionary<Tile, float>();
 		estimateCost.Add (from, 0.0f);
 
 		// The distance of the previous tile with the smallest path.
-		Dictionary<TileData, TileData> cameFrom = new Dictionary<TileData, TileData>();
+		Dictionary<Tile, Tile> cameFrom = new Dictionary<Tile, Tile>();
 
 		// While there are tiles to be visited
 		while(openTiles.Count != 0){
 
 			// Find the current tile as the tile in the list of open tiles with the smallest estimated distance.
-			TileData currentTile = null;
+			Tile currentTile = null;
 			float minDistance = float.MaxValue;
-			foreach(TileData tile in openTiles){
+			foreach(Tile tile in openTiles){
 				if (estimateCost[tile] < minDistance){
 					currentTile = tile;
 					minDistance = estimateCost[tile];
@@ -142,7 +149,7 @@ public class TilemapData : MonoBehaviour {
 			closedTiles.Add (currentTile);
 
 			// Check the neighbours of the current tile.
-			foreach(TileData neighbour in currentTile.neighbours){
+			foreach(Tile neighbour in currentTile.neighbours){
 				if (closedTiles.Contains (neighbour)){
 					continue;
 				}
@@ -162,11 +169,49 @@ public class TilemapData : MonoBehaviour {
 				}
 			}
 		}
-		return null;
+		return new List<Tile>();
 	}
 
-	public List<TileData> ReconstructPath(Dictionary<TileData, TileData> cameFrom, TileData current){
-		List<TileData> path = new List<TileData>();
+	public List<Tile> GetRandomPath(Tile from, Tile minTile, Tile maxTile){
+
+		List<Tile> path = new List<Tile>();
+		
+		if (minTile == maxTile || from.pathable == false){
+			return path;
+		}
+		
+		// If there is no origin tile, there can be no path.
+		if (!from){
+			return path;
+		}
+		
+		// Initialize the destination as the original tile.
+		Tile destination = from;
+		
+		// Find a random pathable location in the specified range that is not the original tile.
+		while(destination == from || destination.pathable == false){
+			destination = RandomTileInRegion(minTile, maxTile);
+		}
+		
+		return GetPath (from, destination);
+		
+	}
+
+	public Tile RandomTile(){
+		return RandomTileInRegion(tiles[0,0],tiles[sizeX-1, sizeY-1]);
+	}
+
+	public Tile RandomTileInRegion(Tile minTile, Tile maxTile){
+		int x = (int)Random.Range (minTile.x, maxTile.x+1);
+		int y = (int)Random.Range (minTile.y, maxTile.y+1);
+		if (tiles[x,y].pathable == true)
+			return tiles[x,y];		
+		else
+			return RandomTileInRegion(minTile, maxTile);
+	}
+
+	public List<Tile> ReconstructPath(Dictionary<Tile, Tile> cameFrom, Tile current){
+		List<Tile> path = new List<Tile>();
 		path.Add (current);
 
 		// Retrace the path back to the origin.
@@ -176,8 +221,12 @@ public class TilemapData : MonoBehaviour {
 		}
 		return path;
 	}
-
-	public float DistanceBetweenTiles(TileData tile1, TileData tile2){
+	
+	public bool IsPathSafe(Tile tile1, Tile tile2){
+		return true;
+	}
+	
+	public float DistanceBetweenTiles(Tile tile1, Tile tile2){
 
 		// If either tile is not pathable, the distance should be infinite.
 		if (!tile1.pathable || ! tile2.pathable){
@@ -191,8 +240,9 @@ public class TilemapData : MonoBehaviour {
 		return distance2DVector.magnitude;
 	}
 
-	public TileData GetTile(int x, int y){
+	public Tile GetTile(int x, int y){
 		return tiles[x, y];
 	}
 
 }
+

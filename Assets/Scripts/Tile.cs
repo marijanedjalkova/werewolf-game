@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class TileData : MonoBehaviour {
+public class Tile : MonoBehaviour {
 
 	public int x;
 	public int y;
 	public bool pathable = true;
 
-	public List<TileData> neighbours;
+	public List<Tile> neighbours;
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +17,10 @@ public class TileData : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void SetSprite(Sprite s){
+		this.GetComponent<SpriteRenderer>().sprite = s;
 	}
 
 	public void SetPathable(bool p){
@@ -29,7 +33,7 @@ public class TileData : MonoBehaviour {
 		this.transform.localPosition = new Vector3(x, y, 0.0f);
 	}
 
-	public void AddNeighbour(TileData neighbour){
+	public void AddNeighbour(Tile neighbour){
 		neighbours.Add (neighbour);
 	}
 }

@@ -1,24 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class NPCMovement : MonoBehaviour {
+public class NPC : MonoBehaviour {
 
-	public TilemapData tilemap;
-	
-	public List<TileData> currentPath;
+	public float speed = 3.0f;
 
-	public float speed = 1;
+	public int health = 100;
+
+	public int suspicion = 0;
+
+	public Tilemap tilemap;
 
 	public Vector3 velocity;
 
-	public float moveChance = 99;
+	public float idleChance = 99.0f;
 
-	public TileData currentTile = null;
-	
+	public Tile currentTile = null;
+
+	public List<Tile> currentPath;
+
 	// Use this for initialization
 	void Start () {
-	
+
 		velocity = new Vector3 (0, 0, 0);
+		currentPath = new List<Tile>();
 
 	}
 	
@@ -33,13 +38,17 @@ public class NPCMovement : MonoBehaviour {
 		}
 
 		this.velocity = new Vector3 (0, 0, 0);
+		if (currentPath == null){
+			Debug.Log (currentTile.x);
+			Debug.Log (currentTile.y);
+		}
 
 		// If the currentPath is empty, there is a chance every frame to start to move to a random tile. (moveChance%)
 		// Currently hardcoded to move on the map I made, but could be generalized to allow the NPC
 		// to walk around a room idly. -- Kyle
 		if (currentPath.Count == 0){
-			float chanceToMove = Random.Range(0, 100);
-			if (chanceToMove >= moveChance){
+			float chanceToMove = Random.Range(0.0f, 100.0f);
+			if (chanceToMove >= idleChance){
 					currentPath = tilemap.GetRandomPath(currentTile,
 				                      					tilemap.GetTile (0,0),
 				                      					tilemap.GetTile(tilemap.sizeX-1, tilemap.sizeY-1));
@@ -61,7 +70,7 @@ public class NPCMovement : MonoBehaviour {
 			distanceToTravel = directionToDestination.magnitude;
 
 			// If the NPC is close enough, remove the point from the queue.
-			if (directionToDestination.magnitude < 0.1f){
+			if (directionToDestination.magnitude < 0.001f){
 				this.currentTile = this.currentPath[nextIndex];
 				this.currentPath.RemoveAt(nextIndex);
 				this.velocity = new Vector3 (0, 0, 0);
@@ -84,7 +93,31 @@ public class NPCMovement : MonoBehaviour {
 
 	}
 
+	public void SetLocation(Vector3 loc){
+		this.transform.position = loc;
+	}
 
+	public void SetTilemap(Tilemap t){
+		this.tilemap = t;
+	}
+
+	public void SetCurrentTile(Tile t){
+		currentTile = t;
+	}
+
+	// Method for testing if npcs are damaged.
+	void OnMouseDown(){
+		this.TakeDamage (100);
+	}
+
+	public void TakeDamage(int damage){
+		this.health -= damage;
+
+		if (this.health <= 0){
+			Destroy(gameObject);
+		}
+
+	}
 
 
 }
