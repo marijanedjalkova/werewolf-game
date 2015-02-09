@@ -11,7 +11,7 @@ public class NPC : MonoBehaviour {
 
 	public Tilemap tilemap;
 
-	public Vector3 velocity;
+	public Vector2 velocity;
 
 	public float idleChance = 99.0f;
 
@@ -22,13 +22,13 @@ public class NPC : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		velocity = new Vector3 (0, 0, 0);
+		velocity = new Vector2 (0.0f, 0.0f);
 		currentPath = new List<Tile>();
 
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 	
 		float distanceToTravel = 0.0f;
 
@@ -37,7 +37,7 @@ public class NPC : MonoBehaviour {
 			                               (int)this.transform.position.y);
 		}
 
-		this.velocity = new Vector3 (0, 0, 0);
+		this.velocity = new Vector2 (0.0f, 0.0f);
 		if (currentPath == null){
 			Debug.Log (currentTile.x);
 			Debug.Log (currentTile.y);
@@ -58,22 +58,20 @@ public class NPC : MonoBehaviour {
 		// Get the next point in the path.
 		int nextIndex = this.currentPath.Count-1;
 		if (nextIndex != -1){
-			Vector3 currentPosition = new Vector3(this.transform.position.x,
-			                                      this.transform.position.y,
-			                                      0);
-			Vector3 nextDestination = new Vector3(this.currentPath[nextIndex].transform.position.x,
-			                                      this.currentPath[nextIndex].transform.position.y,
-			                                      0);
+			Vector2 currentPosition = new Vector2(this.transform.position.x,
+			                                      this.transform.position.y);
+			Vector2 nextDestination = new Vector2(this.currentPath[nextIndex].transform.position.x,
+			                                      this.currentPath[nextIndex].transform.position.y);
 
 			// Direction and distance to the next point.
-			Vector3 directionToDestination = nextDestination-currentPosition;
+			Vector2 directionToDestination = nextDestination-currentPosition;
 			distanceToTravel = directionToDestination.magnitude;
 
 			// If the NPC is close enough, remove the point from the queue.
 			if (directionToDestination.magnitude < 0.001f){
 				this.currentTile = this.currentPath[nextIndex];
 				this.currentPath.RemoveAt(nextIndex);
-				this.velocity = new Vector3 (0, 0, 0);
+				this.velocity = new Vector2 (0.0f, 0.0f);
 
 			} else {
 
@@ -86,9 +84,9 @@ public class NPC : MonoBehaviour {
 
 		// Move the NPC.
 		if (speed * Time.deltaTime > distanceToTravel) {
-			this.transform.Translate (this.velocity.normalized * distanceToTravel);
+			this.rigidbody2D.velocity = (this.velocity.normalized * distanceToTravel /Time.deltaTime);
 		} else {
-			this.transform.Translate (this.velocity * Time.deltaTime);
+			this.rigidbody2D.velocity = (this.velocity);
 		}
 
 	}

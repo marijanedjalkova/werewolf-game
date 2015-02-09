@@ -10,29 +10,6 @@ public class LevelCreator : MonoBehaviour {
 	public GameObject tileObject;
 	public GameObject npcObject;
 
-	public string[] npcNames = {
-				"NPC1",
-				"NPC2",
-				"NPC3",
-				"NPC4",
-				"NPC5",
-				"NPC6",
-				"NPC7",
-				"NPC8",
-				"NPC9",
-				"NPC10",
-				"NPC11",
-				"NPC12",
-				"NPC13",
-				"NPC14",
-				"NPC15",
-				"NPC16",
-				"NPC17",
-				"NPC18",
-				"NPC19",
-				"NPC20"
-	};
-
 	Tilemap tilemap;
 
 	List<NPC> npcList;
@@ -49,9 +26,8 @@ public class LevelCreator : MonoBehaviour {
 			tilemap.GenerateTilemap (mapSize, mapSize);
 
 			npcList = new List<NPC>();
-			for(int i = 0; i < 5; i++){
+			for(int i = 0; i < numberOfNPC; i++){
 				GameObject tempNPCObject = Instantiate(npcObject) as GameObject;
-				tempNPCObject.name = npcNames[i];
 				tempNPCObject.transform.parent = this.transform;
 				npcList.Add(tempNPCObject.GetComponent<NPC>());
 				npcList[i].SetTilemap(tilemap);
