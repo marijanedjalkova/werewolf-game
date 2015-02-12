@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 public class NPC : MonoBehaviour {
 
-	public float speed = 3.0f;
+	public Player player;
+
+	public float speed = 0.0f;
 
 	public int health = 100;
 
@@ -29,8 +31,6 @@ public class NPC : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-	
-		float distanceToTravel = 0.0f;
 
 		if (currentTile == null){
 			currentTile = tilemap.GetTile ((int)this.transform.position.x,
@@ -43,50 +43,59 @@ public class NPC : MonoBehaviour {
 			Debug.Log (currentTile.y);
 		}
 
-		// If the currentPath is empty, there is a chance every frame to start to move to a random tile. (moveChance%)
-		// Currently hardcoded to move on the map I made, but could be generalized to allow the NPC
-		// to walk around a room idly. -- Kyle
-		if (currentPath.Count == 0){
-			float chanceToMove = Random.Range(0.0f, 100.0f);
-			if (chanceToMove >= idleChance){
-					currentPath = tilemap.GetRandomPath(currentTile,
-				                      					tilemap.GetTile (0,0),
-				                      					tilemap.GetTile(tilemap.sizeX-1, tilemap.sizeY-1));
-			}
-		}
+		if (player.isTransformed){
 
-		// Get the next point in the path.
-		int nextIndex = this.currentPath.Count-1;
-		if (nextIndex != -1){
-			Vector2 currentPosition = new Vector2(this.transform.position.x,
-			                                      this.transform.position.y);
-			Vector2 nextDestination = new Vector2(this.currentPath[nextIndex].transform.position.x,
-			                                      this.currentPath[nextIndex].transform.position.y);
+			Vector2 directionFromPlayer = (this.rigidbody2D.position - player.rigidbody2D.position).normalized;
+			directionFromPlayer = Quaternion.AngleAxis(Random.Range (-60.0f,60.0f), Vector3.forward) * directionFromPlayer;
+			this.rigidbody2D.velocity = directionFromPlayer*speed*1.5f;
 
-			// Direction and distance to the next point.
-			Vector2 directionToDestination = nextDestination-currentPosition;
-			distanceToTravel = directionToDestination.magnitude;
-
-			// If the NPC is close enough, remove the point from the queue.
-			if (directionToDestination.magnitude < 0.001f){
-				this.currentTile = this.currentPath[nextIndex];
-				this.currentPath.RemoveAt(nextIndex);
-				this.velocity = new Vector2 (0.0f, 0.0f);
-
-			} else {
-
-				// Set the npc to move towards the destination and not overshoot it.
-				this.velocity.x = speed*(directionToDestination.normalized.x);
-				this.velocity.y = speed*(directionToDestination.normalized.y);
-
-			}
-		}
-
-		// Move the NPC.
-		if (speed * Time.deltaTime > distanceToTravel) {
-			this.rigidbody2D.velocity = (this.velocity.normalized * distanceToTravel /Time.deltaTime);
 		} else {
-			this.rigidbody2D.velocity = (this.velocity);
+			// If the currentPath is empty, there is a chance every frame to start to move to a random tile. (moveChance%)
+			// Currently hardcoded to move on the map I made, but could be generalized to allow the NPC
+			// to walk around a room idly. -- Kyle
+			if (currentPath.Count == 0){
+				float chanceToMove = Random.Range(0.0f, 100.0f);
+				if (chanceToMove >= idleChance){
+						currentPath = tilemap.GetRandomPath(currentTile,
+				                      						tilemap.GetTile (0,0),
+				                      						tilemap.GetTile(tilemap.sizeX-1, tilemap.sizeY-1));
+				}
+			}
+
+			float distanceToTravel = 0.0f;
+			// Get the next point in the path.
+			int nextIndex = this.currentPath.Count-1;
+			if (nextIndex != -1){
+				Vector2 currentPosition = new Vector2(this.transform.position.x,
+			        	                              this.transform.position.y);
+				Vector2 nextDestination = new Vector2(this.currentPath[nextIndex].transform.position.x,
+			    	                                  this.currentPath[nextIndex].transform.position.y);
+	
+				// Direction and distance to the next point.
+				Vector2 directionToDestination = nextDestination-currentPosition;
+				distanceToTravel = directionToDestination.magnitude;
+
+				// If the NPC is close enough, remove the point from the queue.
+				if (directionToDestination.magnitude < 0.001f){
+					this.currentTile = this.currentPath[nextIndex];
+					this.currentPath.RemoveAt(nextIndex);
+					this.velocity = new Vector2 (0.0f, 0.0f);
+
+				} else {
+
+					// Set the npc to move towards the destination and not overshoot it.
+					this.velocity.x = speed*(directionToDestination.normalized.x);
+					this.velocity.y = speed*(directionToDestination.normalized.y);
+
+				}
+			}
+
+			// Move the NPC.
+			if (speed * Time.deltaTime > distanceToTravel) {
+				this.rigidbody2D.velocity = (this.velocity.normalized * distanceToTravel /Time.deltaTime);
+			} else {
+				this.rigidbody2D.velocity = (this.velocity);
+			}
 		}
 
 	}
@@ -113,7 +122,6 @@ public class NPC : MonoBehaviour {
 
 		if (this.health <= 0){
 			Destroy(gameObject);
-
 		}
 
 	}

@@ -99,7 +99,6 @@ public class Tilemap : MonoBehaviour {
 					tiles[x,y].AddNeighbour (tiles[x,y-1]);
 				}
 
-
 			}
 		}
 	}
@@ -196,7 +195,7 @@ public class Tilemap : MonoBehaviour {
 		return GetPath (from, destination);
 		
 	}
-
+	
 	public Tile RandomTile(){
 		return RandomTileInRegion(tiles[0,0],tiles[sizeX-1, sizeY-1]);
 	}
@@ -209,7 +208,7 @@ public class Tilemap : MonoBehaviour {
 		else
 			return RandomTileInRegion(minTile, maxTile);
 	}
-
+	
 	public List<Tile> ReconstructPath(Dictionary<Tile, Tile> cameFrom, Tile current){
 		List<Tile> path = new List<Tile>();
 		path.Add (current);

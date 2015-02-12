@@ -36,6 +36,9 @@ public class Tile : MonoBehaviour {
 		this.y = y;
 		this.transform.localPosition = new Vector3(x, y, 0.0f);
 	}
+	public Vector2 GetLocation(){
+		return new Vector2(this.x, this.y);
+	}
 
 	public void AddNeighbour(Tile neighbour){
 		neighbours.Add (neighbour);

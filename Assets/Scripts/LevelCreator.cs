@@ -6,6 +6,7 @@ public class LevelCreator : MonoBehaviour {
 	public int mapSize = 0;
 	public int numberOfNPC = 0;
 
+	public GameObject playerObject;
 	public GameObject tilemapObject;
 	public GameObject tileObject;
 	public GameObject npcObject;
@@ -16,7 +17,7 @@ public class LevelCreator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 		if (mapSize > 3){
 
 			GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
@@ -29,8 +30,12 @@ public class LevelCreator : MonoBehaviour {
 			for(int i = 0; i < numberOfNPC; i++){
 				GameObject tempNPCObject = Instantiate(npcObject) as GameObject;
 				tempNPCObject.transform.parent = this.transform;
+				tempNPCObject.layer = LayerMask.NameToLayer("NPC");
+
 				npcList.Add(tempNPCObject.GetComponent<NPC>());
 				npcList[i].SetTilemap(tilemap);
+				npcList[i].player = playerObject.GetComponent<Player>();
+
 				Tile currentTile = tilemap.RandomTile();
 				npcList[i].SetCurrentTile(currentTile);
 				npcList[i].SetLocation (new Vector3(currentTile.x,currentTile.y,-1));
