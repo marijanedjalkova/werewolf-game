@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
 		if (coll.name == "NPC(Clone)"){
 			NPC npc = coll.GetComponent<NPC>();
 			npc.TakeDamage (100);
-			hunger_bar.increaseBy(0.05f);
+			hunger_bar.increaseBy(0.6f);
 		}
 
 

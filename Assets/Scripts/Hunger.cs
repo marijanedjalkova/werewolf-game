@@ -38,7 +38,9 @@ public class Hunger : MonoBehaviour
 		void Update ()
 		{
 		barDisplay = hunger_level;
-		if (hunger_level == 1) {
+		Debug.Log (hunger_level);
+		if (hunger_level >= 1) {
+			Debug.Log("yah!");
 			Application.LoadLevel("won_level");
 				}
 
