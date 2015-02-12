@@ -16,7 +16,7 @@ public class LevelCreator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+	
 		if (mapSize > 3){
 
 			GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;

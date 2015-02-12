@@ -7,8 +7,11 @@ public class Player : MonoBehaviour {
 
 	public Vector2 velocity;
 
+	public Hunger hunger_bar;
+
 	//Animator anim;
 	void Start(){
+
 
 		//anim = GetComponent<Animator> ();
 		//anim.SetBool ("up", false);
@@ -70,6 +73,7 @@ public class Player : MonoBehaviour {
 		if (coll.name == "NPC(Clone)"){
 			NPC npc = coll.GetComponent<NPC>();
 			npc.TakeDamage (100);
+			hunger_bar.increaseBy(0.05f);
 		}
 
 

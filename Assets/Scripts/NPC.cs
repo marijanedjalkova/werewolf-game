@@ -113,6 +113,7 @@ public class NPC : MonoBehaviour {
 
 		if (this.health <= 0){
 			Destroy(gameObject);
+
 		}
 
 	}

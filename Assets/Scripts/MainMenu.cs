@@ -23,8 +23,8 @@ public class MainMenu : MonoBehaviour {
 			Application.LoadLevel("prototype_level");
 		}
 		if (GUI.Button (quitButtonRect, "Quit Game")) {
-			//Quits th game
-			Application.Quit (); //Wrong method, not sure what right one is 
+			//Quits the game
+			Application.Quit (); 
 		}
 	}
 
