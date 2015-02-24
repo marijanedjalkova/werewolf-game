@@ -96,7 +96,7 @@ public class Player : MonoBehaviour {
 	}	
 	
 	
-	void OnCollisionEnter2D(Collision2D coll){
+	void OnTriggerEnter2D(Collider2D coll){
 
 		if (coll.gameObject.name == "NPC(Clone)" && isTransformed){
 			NPC npc = coll.gameObject.GetComponent<NPC>();

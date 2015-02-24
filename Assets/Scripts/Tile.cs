@@ -6,6 +6,10 @@ public class Tile : MonoBehaviour {
 	public int x;
 	public int y;
 	public bool pathable = true;
+	public bool hallway;
+
+	public Sprite[] pathableSprites;
+	public Sprite[] unpathableSprites;
 
 	public List<Tile> neighbours;
 
@@ -23,12 +27,17 @@ public class Tile : MonoBehaviour {
 	
 	}
 
-	public void SetSprite(Sprite s){
-		this.GetComponent<SpriteRenderer>().sprite = s;
-	}
-
 	public void SetPathable(bool p){
 		pathable = p;
+
+		SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
+
+		if (pathable){
+			renderer.sprite = pathableSprites[Random.Range (0, pathableSprites.Length)];
+		} else {
+			renderer.sprite = unpathableSprites[Random.Range (0, unpathableSprites.Length)];
+		}
+
 	}
 
 	public void SetLocation(int x, int y){

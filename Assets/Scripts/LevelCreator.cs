@@ -17,29 +17,27 @@ public class LevelCreator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		
+		GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
+		tilemap = tempTilemapObject.GetComponent<Tilemap>();
+		tilemap.GenerateTilemap (mapSize);
+		playerObject.transform.position = new Vector3(tilemap.RandomStart().x, tilemap.RandomStart().y, -1);
 
-		if (mapSize > 3){
+		npcList = new List<NPC>();
+		for(int i = 0; i < numberOfNPC; i++){
 
-			GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
-			tempTilemapObject.transform.parent = this.transform;
-			tilemap = tempTilemapObject.GetComponent<Tilemap>();
-			tilemap.SetTile (tileObject);
-			tilemap.GenerateTilemap (mapSize, mapSize);
+			GameObject tempNPCObject = Instantiate(npcObject) as GameObject;
+			tempNPCObject.transform.parent = this.transform;
+			tempNPCObject.layer = LayerMask.NameToLayer("NPC");
 
-			npcList = new List<NPC>();
-			for(int i = 0; i < numberOfNPC; i++){
-				GameObject tempNPCObject = Instantiate(npcObject) as GameObject;
-				tempNPCObject.transform.parent = this.transform;
-				tempNPCObject.layer = LayerMask.NameToLayer("NPC");
+			npcList.Add(tempNPCObject.GetComponent<NPC>());
+			npcList[i].SetTilemap(tilemap);
+			npcList[i].player = playerObject.GetComponent<Player>();
 
-				npcList.Add(tempNPCObject.GetComponent<NPC>());
-				npcList[i].SetTilemap(tilemap);
-				npcList[i].player = playerObject.GetComponent<Player>();
+			Tile currentTile = tilemap.RandomStart();
+			npcList[i].SetCurrentTile(currentTile);
+			npcList[i].SetLocation (new Vector3(currentTile.x,currentTile.y,-1));
 
-				Tile currentTile = tilemap.RandomTile();
-				npcList[i].SetCurrentTile(currentTile);
-				npcList[i].SetLocation (new Vector3(currentTile.x,currentTile.y,-1));
-			}
 		}
 
 	}

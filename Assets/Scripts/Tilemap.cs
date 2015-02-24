@@ -1,106 +1,312 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+#pragma warning disable 0649
+public struct Id {
+	int x;
+	int y;
+
+	public Id(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+}
+#pragma warning restore 0649
+
 public class Tilemap : MonoBehaviour {
 
-	public int sizeX = 0;
-	public int sizeY = 0;
-
+	public GameObject room;
 	public GameObject tileObject;
 
-	public Tile[,] tiles;
+	public Dictionary<Id, Tile> tiles;
+	public Sprite a;
+	private List<Room> rooms;
+	private List<Room> halls;
 
-	public Sprite pathable;
-	public Sprite unpathable;
+	private int originX = int.MaxValue;
+	private int originY = int.MaxValue;
 	
+	private int cornerX = int.MinValue;
+	private int cornerY = int.MinValue;
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 
-	public void SetTile(GameObject tile){
-		this.tileObject = tile;
+	public void GenerateTilemap(int numberOfRooms){
+
+		rooms = new List<Room>();
+		halls = new List<Room>();
+
+		tiles = new Dictionary<Id, Tile>();
+
+		this.BuildRooms (numberOfRooms);
+
+		foreach (Room r in rooms){
+			foreach (Tile t in r.tiles){
+				tiles[new Id(t.x, t.y)] = t;
+				t.hallway = false;
+			}
+		}
+		
+		this.ConnectRooms ();
+		foreach (Room h in halls){
+			foreach (Tile t in h.tiles){
+				if (t != null){
+					t.hallway = true;
+					if (tiles.ContainsKey (new Id(t.x, t.y))){
+						if (tiles[new Id(t.x, t.y)].pathable == false){
+							Destroy (tiles[new Id(t.x, t.y)].gameObject);
+							tiles[new Id(t.x, t.y)] = t;
+						} else {
+							Destroy (t.gameObject);
+						}
+					} else {
+						tiles[new Id(t.x, t.y)] = t;
+					}
+				}
+			}
+		}
+
+		foreach(Room r in rooms){
+			originX = Mathf.Min (originX, r.originX);
+			originY = Mathf.Min (originY, r.originY);
+			cornerX = Mathf.Max (cornerX, r.originX + r.sizeX);
+			cornerY = Mathf.Max (cornerY, r.originY + r.sizeY);
+		}
+
+		foreach(Room h in halls){
+			originX = Mathf.Min (originX, h.originX);
+			originY = Mathf.Min (originY, h.originY);
+			cornerX = Mathf.Max (cornerX, h.originX + h.sizeX);
+			cornerY = Mathf.Max (cornerY, h.originY + h.sizeY);
+		}
+
+		this.RaiseWalls();
+		this.SetNeighbours();
+
 	}
 
-	public void GenerateTilemap(int sizeX, int sizeY){
+	private void BuildRooms(int numberOfRooms){
 
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
-
-		tiles = new Tile[sizeX, sizeY];
-
-		for(int x = 0; x < sizeX;x++){
-			for(int y = 0; y < sizeY; y++) {
-				if (x == 0 || x == sizeX-1 ||
-				    y == 0 || y == sizeY-1){
-					GameObject currentTile = Instantiate(tileObject) as GameObject;
-					currentTile.transform.parent = this.transform;
-					tiles[x,y] = currentTile.GetComponent<Tile>();
-					tiles[x,y].SetLocation(x, y);
-					tiles[x,y].SetSprite (unpathable);
-					tiles[x,y].SetPathable (false);
+		if (numberOfRooms == 0){
+			return;
+		}
+		// Create the starting room.
+		GameObject temp = GameObject.Instantiate (room) as GameObject;
+		rooms.Add (temp.GetComponent<Room>());
+		rooms[0].CreateRoom(0, 0, 10, 10);
+		
+		// Randomize the remaining rooms
+		for (int i = 1; i < numberOfRooms; i++){
+			temp = GameObject.Instantiate (room) as GameObject;
+			rooms.Add (temp.GetComponent<Room>());
+			rooms[i].CreateRoom(Random.Range (-1, 1),
+			                    Random.Range (-1, 1),
+			                    Random.Range (6, 15),
+			                    Random.Range (6, 15));
+		}
+		
+		bool collisions = true;
+		int numberOfIterations = 0;
+		while (collisions && numberOfIterations < 100){
+			collisions = false;
+			numberOfIterations++;
+			foreach(Room room1 in rooms){
+				if (room1 != rooms[0]){
+					foreach(Room room2 in rooms){
+						if (room1 != room2){
+							if (room1.Overlaps(room2)){
+								collisions = true;
+								room1.MoveAway (room2);
+								room2.MoveAway (room1);
+							}
+						}
+					}
 				}
 			}
+		}
+		
+		List<Room> roomsToRemove = new List<Room>();
+		if (collisions){
+			foreach(Room room1 in rooms){
+				if (room1 != rooms[0]){
+					foreach(Room room2 in rooms){
+						if (room1 != room2){
+							if (room1.Overlaps(room2)){
+								roomsToRemove.Add (room1);
+							}
+						}
+					}
+				}
+			}
+			foreach(Room r in roomsToRemove){
+				rooms.Remove (r);
+				Destroy(r.gameObject);
+			}
+		}
+	}
+
+	private void ConnectRooms(){
+
+		List<Room> unconnectedRooms = new List<Room>(rooms);
+		List<Room> connectedRooms = new List<Room>();
+
+		unconnectedRooms.Remove (rooms[0]);
+		connectedRooms.Add (rooms[0]);
+
+		while (unconnectedRooms.Count > 0){
+			Room closestConnectedRoom = null;
+			Room closestUnconnectedRoom = null;
+			float shortestDistance = float.MaxValue;
+			foreach (Room connectedRoom in connectedRooms){
+				foreach (Room unconnectedRoom in unconnectedRooms){
+					float distance = connectedRoom.DistanceTo (unconnectedRoom);
+					if (distance < shortestDistance){
+						shortestDistance = distance;
+						closestConnectedRoom = connectedRoom;
+						closestUnconnectedRoom = unconnectedRoom;
+					}
+				}
+			}
+			this.Connect (closestConnectedRoom, closestUnconnectedRoom);
+			unconnectedRooms.Remove (closestUnconnectedRoom);
+			connectedRooms.Add (closestUnconnectedRoom);
+		}
+	}
+
+	private void Connect(Room r1, Room r2){
+
+		GameObject hall = GameObject.Instantiate (room) as GameObject;
+		halls.Add (hall.GetComponent<Room>());
+		hall.GetComponent<Room>().CreateHallway ((int)r1.Centre().x,
+		                                         (int)r1.Centre().y,
+		                                         (int)r2.Centre().x,
+		                                         (int)r2.Centre().y);
+		
+	}
+
+	public void RaiseWalls(){
+
+		for(int x = originX; x < cornerX; x++){
+			for(int y = originY; y < cornerY; y++){
+
+				if (tiles.ContainsKey (new Id(x,y)) && tiles[new Id(x,y)].pathable){
+					if (!tiles.ContainsKey (new Id(x-1,y))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x-1,y)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x-1,y)].SetLocation(x-1, y);
+						tiles[new Id(x-1,y)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x,y+1))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x,y+1)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x,y+1)].SetLocation(x,y+1);
+						tiles[new Id(x,y+1)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x+1,y))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x+1,y)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x+1,y)].SetLocation(x+1,y);
+						tiles[new Id(x+1,y)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x,y-1))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x,y-1)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x,y-1)].SetLocation(x,y-1);
+						tiles[new Id(x,y-1)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x-1,y-1))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x-1,y-1)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x-1,y-1)].SetLocation(x-1,y-1);
+						tiles[new Id(x-1,y-1)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x-1,y+1))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x-1,y+1)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x-1,y+1)].SetLocation(x-1,y+1);
+						tiles[new Id(x-1,y+1)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x+1,y+1))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x+1,y+1)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x+1,y+1)].SetLocation(x+1,y+1);
+						tiles[new Id(x+1,y+1)].SetPathable (false);
+					}
+					if (!tiles.ContainsKey (new Id(x+1,y-1))){
+						GameObject currentTile = Instantiate(tileObject) as GameObject;
+						currentTile.transform.parent = this.transform;
+						tiles[new Id(x+1,y-1)] = currentTile.GetComponent<Tile>();
+						tiles[new Id(x+1,y-1)].SetLocation(x+1,y-1);
+						tiles[new Id(x+1,y-1)].SetPathable (false);
+					}
+				}
+			}
+		}
+
+	}
+
+	public void SetNeighbours(){
+
+		foreach (KeyValuePair<Id, Tile> t in tiles){
+
+			if(t.Value.pathable){
+
+				int x = t.Value.x;
+				int y = t.Value.y;
+
 					
-		}
-
-		// Create the tile objects
-		for(int x = 1; x < sizeX-1; x++) {
-			for(int y = 1; y < sizeY-1; y++) {
-				GameObject currentTile = Instantiate(tileObject) as GameObject;
-				currentTile.transform.parent = this.transform;
-				tiles[x,y] = currentTile.GetComponent<Tile>();
-				tiles[x,y].SetLocation(x, y);
-				tiles[x,y].SetSprite (pathable);
-				tiles[x,y].SetPathable (true);
-			}
-		}
-
-		for(int x = 0; x < sizeX; x++) {
-			for(int y = 0; y < sizeY; y++) {
-
-				// Down Left Neighbour
-				if (x-1 >= 0 && y-1 >= 0){
-					tiles[x,y].AddNeighbour (tiles[x-1,y-1]);
-				}
-
 				// Left Neighbour
-				if (x-1 >= 0){
-					tiles[x,y].AddNeighbour (tiles[x-1,y]);
-				}
-
-				// Up Left Neighbour
-				if (x-1 >= 0 && y+1 < sizeY){
-					tiles[x,y].AddNeighbour (tiles[x-1,y+1]);
+				if (tiles.ContainsKey (new Id(x-1, y)) && tiles[new Id(x-1,y)].pathable){
+					tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x-1, y)]);
 				}
 				
 				// Up Neighbour
-				if (y+1 < sizeY){
-					tiles[x,y].AddNeighbour (tiles[x,y+1]);
+				if (tiles.ContainsKey (new Id(x, y+1)) && tiles[new Id(x,y+1)].pathable){
+					tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x, y+1)]);
 				}
 
-				// Up Right Neighbour
-				if (y+1 < sizeY && x+1 < sizeX){
-					tiles[x,y].AddNeighbour (tiles[x+1,y+1]);
-				}
-				
 				// Right Neighbour
-				if (x+1 < sizeX){
-					tiles[x,y].AddNeighbour (tiles[x+1,y]);
+				if (tiles.ContainsKey (new Id(x+1, y)) && tiles[new Id(x+1,y)].pathable){
+					tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x+1, y)]);
 				}
 
-				// Down Right Neighbour
-				if (x+1 < sizeX && y-1 >= 0){
-					tiles[x,y].AddNeighbour (tiles[x+1,y-1]);
-				}
-				
 				// Down Neighbour
-				if (y-1 >= 0){
-					tiles[x,y].AddNeighbour (tiles[x,y-1]);
+				if (tiles.ContainsKey (new Id(x, y-1)) && tiles[new Id(x,y-1)].pathable){
+					tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x, y-1)]);
 				}
 
+				if (!t.Value.hallway){
+					// Down Left Neighbour
+					if (tiles.ContainsKey (new Id(x-1, y-1)) && tiles[new Id(x-1,y-1)].pathable && !tiles[new Id(x-1,y-1)].hallway){
+						tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x-1, y-1)]);
+					}
+					// Down Right Neighbour
+					if (tiles.ContainsKey (new Id(x+1, y-1)) && tiles[new Id(x+1,y-1)].pathable && !tiles[new Id(x+1,y-1)].hallway){
+						tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x+1, y-1)]);
+					}
+				
+					// Up Left Neighbour
+					if (tiles.ContainsKey (new Id(x-1, y+1)) && tiles[new Id(x-1,y+1)].pathable && !tiles[new Id(x-1,y+1)].hallway){
+						tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x-1, y+1)]);
+					}
+
+					// Up Right Neighbour
+					if (tiles.ContainsKey (new Id(x+1, y+1)) && tiles[new Id(x+1,y+1)].pathable && !tiles[new Id(x+1,y+1)].hallway){
+						tiles[new Id(x, y)].AddNeighbour (tiles[new Id(x+1, y+1)]);
+					}
+				}
 			}
-		}
+		}				
 	}
 
 	public List<Tile> GetPath(Tile from, Tile to){
@@ -168,51 +374,39 @@ public class Tilemap : MonoBehaviour {
 				}
 			}
 		}
+
 		return new List<Tile>();
 	}
 
-	public List<Tile> GetRandomPath(Tile from, Tile minTile, Tile maxTile){
+	public List<Tile> GetRandomPath(Tile from){
 
 		List<Tile> path = new List<Tile>();
-		
-		if (minTile == maxTile || from.pathable == false){
-			return path;
-		}
-		
+
 		// If there is no origin tile, there can be no path.
 		if (!from){
 			return path;
 		}
-		
+
 		// Initialize the destination as the original tile.
 		Tile destination = from;
 		
 		// Find a random pathable location in the specified range that is not the original tile.
-		while(destination == from || destination.pathable == false){
-			destination = RandomTileInRegion(minTile, maxTile);
-		}
-		
+		while (destination == from)
+			destination = rooms[Random.Range (0, rooms.Count)].RandomTile();
+
 		return GetPath (from, destination);
 		
 	}
 	
-	public Tile RandomTile(){
-		return RandomTileInRegion(tiles[0,0],tiles[sizeX-1, sizeY-1]);
+	public Tile RandomStart(){
+		return rooms[0].RandomTile();
 	}
 
-	public Tile RandomTileInRegion(Tile minTile, Tile maxTile){
-		int x = (int)Random.Range (minTile.x, maxTile.x+1);
-		int y = (int)Random.Range (minTile.y, maxTile.y+1);
-		if (tiles[x,y].pathable == true)
-			return tiles[x,y];		
-		else
-			return RandomTileInRegion(minTile, maxTile);
-	}
 	
 	public List<Tile> ReconstructPath(Dictionary<Tile, Tile> cameFrom, Tile current){
 		List<Tile> path = new List<Tile>();
-		path.Add (current);
 
+		path.Add (current);
 		// Retrace the path back to the origin.
 		while(cameFrom.ContainsKey (current)){
 			current = cameFrom[current];
@@ -240,7 +434,7 @@ public class Tilemap : MonoBehaviour {
 	}
 
 	public Tile GetTile(int x, int y){
-		return tiles[x, y];
+		return tiles[new Id(x, y)];
 	}
 
 }

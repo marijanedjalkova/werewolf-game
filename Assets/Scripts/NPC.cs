@@ -38,10 +38,6 @@ public class NPC : MonoBehaviour {
 		}
 
 		this.velocity = new Vector2 (0.0f, 0.0f);
-		if (currentPath == null){
-			Debug.Log (currentTile.x);
-			Debug.Log (currentTile.y);
-		}
 
 		if (player.isTransformed){
 
@@ -54,11 +50,10 @@ public class NPC : MonoBehaviour {
 			// Currently hardcoded to move on the map I made, but could be generalized to allow the NPC
 			// to walk around a room idly. -- Kyle
 			if (currentPath.Count == 0){
+
 				float chanceToMove = Random.Range(0.0f, 100.0f);
 				if (chanceToMove >= idleChance){
-						currentPath = tilemap.GetRandomPath(currentTile,
-				                      						tilemap.GetTile (0,0),
-				                      						tilemap.GetTile(tilemap.sizeX-1, tilemap.sizeY-1));
+						currentPath = tilemap.GetRandomPath(currentTile);
 				}
 			}
 
@@ -76,7 +71,7 @@ public class NPC : MonoBehaviour {
 				distanceToTravel = directionToDestination.magnitude;
 
 				// If the NPC is close enough, remove the point from the queue.
-				if (directionToDestination.magnitude < 0.001f){
+				if (directionToDestination.magnitude < 0.1f){
 					this.currentTile = this.currentPath[nextIndex];
 					this.currentPath.RemoveAt(nextIndex);
 					this.velocity = new Vector2 (0.0f, 0.0f);
@@ -110,11 +105,6 @@ public class NPC : MonoBehaviour {
 
 	public void SetCurrentTile(Tile t){
 		currentTile = t;
-	}
-
-	// Method for testing if npcs are damaged.
-	void OnMouseDown(){
-		this.TakeDamage (100);
 	}
 
 	public void TakeDamage(int damage){
