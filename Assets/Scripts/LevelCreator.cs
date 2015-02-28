@@ -20,8 +20,9 @@ public class LevelCreator : MonoBehaviour {
 		
 		GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
 		tilemap = tempTilemapObject.GetComponent<Tilemap>();
+		tilemap.player = playerObject;
 		tilemap.GenerateTilemap (mapSize);
-		playerObject.transform.position = new Vector3(tilemap.RandomStart().x, tilemap.RandomStart().y, -1);
+		playerObject.transform.position = tilemap.RandomStartPlayer();
 
 		npcList = new List<NPC>();
 		for(int i = 0; i < numberOfNPC; i++){
@@ -34,7 +35,7 @@ public class LevelCreator : MonoBehaviour {
 			npcList[i].SetTilemap(tilemap);
 			npcList[i].player = playerObject.GetComponent<Player>();
 
-			Tile currentTile = tilemap.RandomStart();
+			Tile currentTile = tilemap.RandomStartNPC();
 			npcList[i].SetCurrentTile(currentTile);
 			npcList[i].SetLocation (new Vector3(currentTile.x,currentTile.y,-1));
 

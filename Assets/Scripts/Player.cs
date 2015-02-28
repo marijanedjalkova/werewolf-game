@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 
 	Animator anim;
 
-	public bool isTransformed = false;
+	public bool transformed = false;
 	private bool transformation_On_CD = false;
 	private int transform_Cooldown = 0;
 	private int TRANSFORM_CD_TIME = 100;
@@ -41,12 +41,12 @@ public class Player : MonoBehaviour {
 		if (Input.GetKey (KeyCode.Space) && !transformation_On_CD) {
 			if(anim.GetBool("wolfForm") == false){
 				anim.SetBool ("wolfForm", true);
-				isTransformed = true;
+				transformed = true;
 				transformation_On_CD = true;
 			}
 			else{
 				anim.SetBool ("wolfForm", false);
-				isTransformed = false;
+				transformed = false;
 				transformation_On_CD = true;
 			}
 		}
@@ -98,7 +98,7 @@ public class Player : MonoBehaviour {
 	
 	void OnTriggerEnter2D(Collider2D coll){
 
-		if (coll.gameObject.name == "NPC(Clone)" && isTransformed){
+		if (coll.gameObject.name == "NPC(Clone)" && transformed){
 			NPC npc = coll.gameObject.GetComponent<NPC>();
 			npc.TakeDamage (100);
 			hunger_bar.increaseBy(0.05f);

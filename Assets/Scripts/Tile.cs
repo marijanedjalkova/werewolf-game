@@ -16,10 +16,6 @@ public class Tile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
-		if (this.pathable == true){
-			collider2D.isTrigger = true;
-		}
-
 	}
 	
 	// Update is called once per frame
@@ -31,7 +27,7 @@ public class Tile : MonoBehaviour {
 		pathable = p;
 
 		SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
-
+		collider2D.isTrigger = p;
 		if (pathable){
 			renderer.sprite = pathableSprites[Random.Range (0, pathableSprites.Length)];
 		} else {

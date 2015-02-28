@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-#pragma warning disable 0649
+
 public struct Id {
 	int x;
 	int y;
@@ -10,16 +10,20 @@ public struct Id {
 		this.x = x;
 		this.y = y;
 	}
+	public Vector2 v(){
+		return new Vector2(x,y);
+	}
 }
-#pragma warning restore 0649
+
 
 public class Tilemap : MonoBehaviour {
 
 	public GameObject room;
 	public GameObject tileObject;
+	public GameObject player;
 
 	public Dictionary<Id, Tile> tiles;
-	public Sprite a;
+
 	private List<Room> rooms;
 	private List<Room> halls;
 
@@ -95,12 +99,14 @@ public class Tilemap : MonoBehaviour {
 		}
 		// Create the starting room.
 		GameObject temp = GameObject.Instantiate (room) as GameObject;
+		temp.transform.parent = this.transform;
 		rooms.Add (temp.GetComponent<Room>());
 		rooms[0].CreateRoom(0, 0, 10, 10);
 		
 		// Randomize the remaining rooms
 		for (int i = 1; i < numberOfRooms; i++){
 			temp = GameObject.Instantiate (room) as GameObject;
+			temp.transform.parent = this.transform;
 			rooms.Add (temp.GetComponent<Room>());
 			rooms[i].CreateRoom(Random.Range (-1, 1),
 			                    Random.Range (-1, 1),
@@ -179,11 +185,12 @@ public class Tilemap : MonoBehaviour {
 	private void Connect(Room r1, Room r2){
 
 		GameObject hall = GameObject.Instantiate (room) as GameObject;
+		hall.transform.parent = this.transform;
 		halls.Add (hall.GetComponent<Room>());
-		hall.GetComponent<Room>().CreateHallway ((int)r1.Centre().x,
-		                                         (int)r1.Centre().y,
-		                                         (int)r2.Centre().x,
-		                                         (int)r2.Centre().y);
+		hall.GetComponent<Room>().CreateHallway ((int)r1.GetCentre().x,
+		                                         (int)r1.GetCentre().y,
+		                                         (int)r2.GetCentre().x,
+		                                         (int)r2.GetCentre().y);
 		
 	}
 
@@ -309,7 +316,7 @@ public class Tilemap : MonoBehaviour {
 		}				
 	}
 
-	public List<Tile> GetPath(Tile from, Tile to){
+	public List<Tile> GetPath(Tile from, Tile to, bool fleeing){
 		// Based on the A* algorithm from the A* wikipedia page.
 		// http://en.wikipedia.org/wiki/A*_search_algorithm
 
@@ -360,13 +367,13 @@ public class Tilemap : MonoBehaviour {
 				}
 
 				// Cost of the path including the distance between the current tile and its neighbour.
-				float tenativeCost = actualCost[currentTile] + DistanceBetweenTiles(currentTile, neighbour);
+				float tenativeCost = actualCost[currentTile] + DistanceBetweenTiles(currentTile, neighbour, fleeing);
 
 				// Add the new path to the list if it doesn't exist or  the new path is better.
 				if (!openTiles.Contains(neighbour) || tenativeCost < actualCost[neighbour]){
 					cameFrom[neighbour] = currentTile;
 					actualCost[neighbour] = tenativeCost;
-					estimateCost[neighbour] = actualCost[neighbour] + DistanceBetweenTiles(currentTile, to);
+					estimateCost[neighbour] = actualCost[neighbour] + DistanceBetweenTiles(currentTile, to, fleeing);
 
 					if (!openTiles.Contains(neighbour)){
 						openTiles.Add (neighbour);
@@ -394,12 +401,20 @@ public class Tilemap : MonoBehaviour {
 		while (destination == from)
 			destination = rooms[Random.Range (0, rooms.Count)].RandomTile();
 
-		return GetPath (from, destination);
+		return GetPath (from, destination, false);
 		
 	}
-	
-	public Tile RandomStart(){
-		return rooms[0].RandomTile();
+
+	public List<Tile> GetRandomPathFleeing(Tile from){
+		return GetRandomPath(from);
+	}
+
+	public Vector3 RandomStartPlayer(){
+		return new Vector3(rooms[0].GetCentre ().x, rooms[0].GetCentre ().y, -1);
+	}
+
+	public Tile RandomStartNPC(){
+		return rooms[Random.Range (0,rooms.Count)].RandomTile();
 	}
 
 	
@@ -419,7 +434,7 @@ public class Tilemap : MonoBehaviour {
 		return true;
 	}
 	
-	public float DistanceBetweenTiles(Tile tile1, Tile tile2){
+	public float DistanceBetweenTiles(Tile tile1, Tile tile2, bool fleeing){
 
 		// If either tile is not pathable, the distance should be infinite.
 		if (!tile1.pathable || ! tile2.pathable){
@@ -430,7 +445,12 @@ public class Tilemap : MonoBehaviour {
 		Vector2 tile1Location = new Vector2(tile1.x, tile1.y);
 		Vector2 tile2Location = new Vector2(tile2.x, tile2.y);
 		Vector2 distance2DVector = tile2Location - tile1Location;
-		return distance2DVector.magnitude;
+
+		if (fleeing){
+			return distance2DVector.magnitude + (100-(tile2.transform.position-player.transform.position).sqrMagnitude);
+		} else {
+			return distance2DVector.magnitude;
+		}
 	}
 
 	public Tile GetTile(int x, int y){

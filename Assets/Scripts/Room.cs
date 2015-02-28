@@ -138,7 +138,7 @@ public class Room : MonoBehaviour {
 
 	public void MoveAway(Room otherRoom){
 
-		Vector2 vectorBetween = this.Centre () - otherRoom.Centre ();
+		Vector2 vectorBetween = this.GetCentre () - otherRoom.GetCentre ();
 
 		int moveX = System.Math.Sign (vectorBetween.x);
 		int moveY = System.Math.Sign (vectorBetween.y);
@@ -213,7 +213,7 @@ public class Room : MonoBehaviour {
 
 	}
 
-	public Vector2 Centre(){
+	public Vector2 GetCentre(){
 		return new Vector2(this.originX+this.sizeX/2, this.originY+this.sizeY/2);
 	}
 
