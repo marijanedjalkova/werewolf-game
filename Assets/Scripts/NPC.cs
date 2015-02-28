@@ -46,13 +46,14 @@ public class NPC : MonoBehaviour {
 				if (fleeing){
 					speed = 1.5f*baseSpeed;
 				}
-			} else {
-					Check();
+			} else if (timeSinceLastSighting > 0) {
+					UpdatePath();
 
 			}
 			timeSinceLastSighting = 0;
 
 		} else {
+
 			timeSinceLastSighting++;
 			if (timeSinceLastSighting > 500){
 				scared = false;
@@ -87,10 +88,11 @@ public class NPC : MonoBehaviour {
 		}
 	}
 
-	void Check(){
-		
+	void UpdatePath(){
+
 		foreach (Tile t in currentPath){
-			if ((player.transform.position - t.transform.position).magnitude <= 1.25f){
+			if ((player.transform.position - t.transform.position).magnitude <= 2f){
+				Debug.Log (this.transform.position);
 				currentPath = tilemap.GetRandomPathFleeing(currentTile);
 				break;
 			}

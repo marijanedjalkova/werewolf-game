@@ -447,7 +447,7 @@ public class Tilemap : MonoBehaviour {
 		Vector2 distance2DVector = tile2Location - tile1Location;
 
 		if (fleeing){
-			return distance2DVector.magnitude + (100-(tile2.transform.position-player.transform.position).sqrMagnitude);
+			return distance2DVector.magnitude + Mathf.Min(0f,(100-(tile2.transform.position-player.transform.position).sqrMagnitude));
 		} else {
 			return distance2DVector.magnitude;
 		}
