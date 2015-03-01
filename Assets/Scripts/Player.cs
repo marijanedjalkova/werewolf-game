@@ -98,8 +98,10 @@ public class Player : MonoBehaviour {
 
 		//Finds distance to silver
 		var silver = GameObject.Find ("Silver");
-		silverDamage (silver);
-}	
+		if (silver != null){
+			silverDamage (silver);
+		}
+	}	
 	
 	void TransformNPCCheck(){
 
