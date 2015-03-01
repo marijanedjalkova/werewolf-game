@@ -26,6 +26,9 @@ public class NPC : MonoBehaviour {
 
 	private int timeSinceLastSighting;
 
+	public int getSuspicionRate(){
+		return suspicion;
+	}
 
 	// Use this for initialization
 	void Start () {
