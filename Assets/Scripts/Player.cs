@@ -43,6 +43,7 @@ public class Player : MonoBehaviour {
 				anim.SetBool ("wolfForm", true);
 				transformed = true;
 				transformation_On_CD = true;
+				TransformNPCCheck();
 			}
 			else{
 				anim.SetBool ("wolfForm", false);
@@ -95,7 +96,23 @@ public class Player : MonoBehaviour {
 		}
 	}	
 	
-	
+	void TransformNPCCheck(){
+
+		NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
+		foreach(NPC npc in npcs){
+
+			RaycastHit2D hit = Physics2D.Raycast(new Vector2(npc.transform.position.x, npc.transform.position.y),
+			                                     new Vector2(this.transform.position.x, this.transform.position.y)-
+			                                     new Vector2(npc.transform.position.x, npc.transform.position.y));
+			
+			if ((new Vector2(this.transform.position.x, this.transform.position.y) - hit.point).magnitude <= 1){
+				npc.suspicion = 100;
+
+			}
+
+		}
+	}
+
 	void OnTriggerEnter2D(Collider2D coll){
 
 		if (coll.gameObject.name == "NPC(Clone)" && transformed){

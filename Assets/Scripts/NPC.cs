@@ -41,6 +41,10 @@ public class NPC : MonoBehaviour {
 
 	void Update(){
 
+		if (this.suspicion >= 90){
+			AlertNPCS();
+		}
+
 		if (this.IsWerewolfVisible()){
 
 			if (!scared){
@@ -95,7 +99,6 @@ public class NPC : MonoBehaviour {
 
 		foreach (Tile t in currentPath){
 			if ((player.transform.position - t.transform.position).magnitude <= 2f){
-				Debug.Log (this.transform.position);
 				currentPath = tilemap.GetRandomPathFleeing(currentTile);
 				break;
 			}
@@ -120,7 +123,7 @@ public class NPC : MonoBehaviour {
 
 	void Stop(){
 		velocity = new Vector2 (0.0f, 0.0f);
-		this.rigidbody2D.velocity = (this.velocity);
+		this.rigidbody2D.Sleep ();
 		currentPath = new List<Tile>();
 	}
 
@@ -169,6 +172,17 @@ public class NPC : MonoBehaviour {
 				this.rigidbody2D.velocity = (this.velocity.normalized * distanceToTravel /Time.deltaTime);
 			} else {
 				this.rigidbody2D.velocity = (this.velocity);
+			}
+		}
+	}
+
+	void AlertNPCS(){
+
+		NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
+		foreach(NPC npc in npcs){
+			if ((npc.transform.position - this.transform.position).magnitude < 6){
+				npc.suspicion = Mathf.Max (this.suspicion, npc.suspicion);
+				this.suspicion = Mathf.Max (this.suspicion, npc.suspicion);
 			}
 		}
 	}
