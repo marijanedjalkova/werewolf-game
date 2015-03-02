@@ -20,7 +20,6 @@ public class Tilemap : MonoBehaviour {
 
 	public GameObject room;
 	public GameObject tileObject;
-	public GameObject player;
 
 	public Dictionary<Id, Tile> tiles;
 
@@ -316,7 +315,7 @@ public class Tilemap : MonoBehaviour {
 		}				
 	}
 
-	public List<Tile> GetPath(Tile from, Tile to, bool fleeing){
+	public List<Tile> GetPath(Tile from, Tile to){
 		// Based on the A* algorithm from the A* wikipedia page.
 		// http://en.wikipedia.org/wiki/A*_search_algorithm
 
@@ -367,13 +366,13 @@ public class Tilemap : MonoBehaviour {
 				}
 
 				// Cost of the path including the distance between the current tile and its neighbour.
-				float tenativeCost = actualCost[currentTile] + DistanceBetweenTiles(currentTile, neighbour, fleeing);
+				float tenativeCost = actualCost[currentTile] + DistanceBetweenTiles(currentTile, neighbour);
 
 				// Add the new path to the list if it doesn't exist or  the new path is better.
 				if (!openTiles.Contains(neighbour) || tenativeCost < actualCost[neighbour]){
 					cameFrom[neighbour] = currentTile;
 					actualCost[neighbour] = tenativeCost;
-					estimateCost[neighbour] = actualCost[neighbour] + DistanceBetweenTiles(currentTile, to, fleeing);
+					estimateCost[neighbour] = actualCost[neighbour] + DistanceBetweenTiles(currentTile, to);
 
 					if (!openTiles.Contains(neighbour)){
 						openTiles.Add (neighbour);
@@ -401,12 +400,8 @@ public class Tilemap : MonoBehaviour {
 		while (destination == from)
 			destination = rooms[Random.Range (0, rooms.Count)].RandomTile();
 
-		return GetPath (from, destination, false);
+		return GetPath (from, destination);
 		
-	}
-
-	public List<Tile> GetRandomPathFleeing(Tile from){
-		return GetRandomPath(from);
 	}
 
 	public Vector3 RandomStartPlayer(){
@@ -434,7 +429,7 @@ public class Tilemap : MonoBehaviour {
 		return true;
 	}
 	
-	public float DistanceBetweenTiles(Tile tile1, Tile tile2, bool fleeing){
+	public float DistanceBetweenTiles(Tile tile1, Tile tile2){
 
 		// If either tile is not pathable, the distance should be infinite.
 		if (!tile1.pathable || ! tile2.pathable){
@@ -445,12 +440,8 @@ public class Tilemap : MonoBehaviour {
 		Vector2 tile1Location = new Vector2(tile1.x, tile1.y);
 		Vector2 tile2Location = new Vector2(tile2.x, tile2.y);
 		Vector2 distance2DVector = tile2Location - tile1Location;
-
-		if (fleeing){
-			return distance2DVector.magnitude + Mathf.Min(0f,(100-(tile2.transform.position-player.transform.position).sqrMagnitude));
-		} else {
-			return distance2DVector.magnitude;
-		}
+		
+		return distance2DVector.magnitude;
 	}
 
 	public Tile GetTile(int x, int y){

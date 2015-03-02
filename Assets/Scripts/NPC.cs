@@ -10,7 +10,8 @@ public class NPC : MonoBehaviour {
 	public float baseSpeed = 0.0f;
 	private float speed;
 
-	public float idleChance = 99.0f;
+	public float chanceToChangeRooms = 0f;
+	public float wanderChance = 0f;
 
 	public Tilemap tilemap;
 
@@ -74,10 +75,16 @@ public class NPC : MonoBehaviour {
 		if (!scared){
 			// If the currentPath is empty, there is a chance every frame to start to move to a random tile. (moveChance%)
 			if (currentPath.Count == 0){
-				
-				float chanceToMove = Random.Range(0.0f, 100.0f);
-				if (chanceToMove >= idleChance){
-					currentPath = tilemap.GetRandomPath(currentTile);
+
+				float chanceToWander = Random.Range (0.0f, 100f);
+				if (chanceToWander < wanderChance){
+					currentPath.Add (currentTile.GetRandomNeighbour());
+				} else {
+
+					float chanceToMove = Random.Range(0.0f, 100.0f);
+					if (chanceToMove <= chanceToChangeRooms){
+						currentPath = tilemap.GetRandomPath(currentTile);
+					}
 				}
 			}
 		} else {
@@ -87,7 +94,7 @@ public class NPC : MonoBehaviour {
 
 			} else {
 				if (currentPath.Count == 0){
-					currentPath = tilemap.GetRandomPathFleeing(currentTile);
+					currentPath = tilemap.GetRandomPath(currentTile);
 				}
 
 			}
@@ -99,7 +106,7 @@ public class NPC : MonoBehaviour {
 
 		foreach (Tile t in currentPath){
 			if ((player.transform.position - t.transform.position).magnitude <= 2f){
-				currentPath = tilemap.GetRandomPathFleeing(currentTile);
+				currentPath = tilemap.GetRandomPath(currentTile);
 				break;
 			}
 		}

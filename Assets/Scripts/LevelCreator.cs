@@ -20,7 +20,6 @@ public class LevelCreator : MonoBehaviour {
 		
 		GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
 		tilemap = tempTilemapObject.GetComponent<Tilemap>();
-		tilemap.player = playerObject;
 		tilemap.GenerateTilemap (mapSize);
 		playerObject.transform.position = tilemap.RandomStartPlayer();
 

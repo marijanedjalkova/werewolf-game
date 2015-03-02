@@ -45,6 +45,12 @@ public class Tile : MonoBehaviour {
 		return new Vector2(this.x, this.y);
 	}
 
+	public Tile GetRandomNeighbour(){
+
+		return neighbours[Random.Range (0, neighbours.Count)];
+
+	}
+
 	public void AddNeighbour(Tile neighbour){
 		neighbours.Add (neighbour);
 	}
