@@ -57,9 +57,9 @@ MonoBehaviour:
   pathable: 0
   hallway: 0
   pathableSprites:
-  - {fileID: 21300000, guid: 94b16d46d75f683418fce7519f36259c, type: 3}
+  - {fileID: 21300000, guid: 86644d18ae6ee48409c5fbd92d164fb7, type: 3}
   unpathableSprites:
-  - {fileID: 21300000, guid: 197eb4060c2014748a5a5e9036058adc, type: 3}
+  - {fileID: 21300000, guid: 48dd03e911d56094c9c1f102b581575c, type: 3}
   neighbours: []
 --- !u!212 &21200000
 SpriteRenderer:

@@ -513,7 +513,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: efb2863539c7ff14b9910c20a42e5e6b, type: 3}
+  m_Sprite: {fileID: 21300008, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1412476054
 Transform:
@@ -687,6 +687,7 @@ MonoBehaviour:
   tilemapObject: {fileID: 100000, guid: 48262a3c205986e49952fdbe6bedaaf3, type: 2}
   tileObject: {fileID: 100000, guid: 439260824df878e47abf9a018e992c09, type: 2}
   npcObject: {fileID: 100002, guid: 923d435dc0a8e70429bae44b453e01ce, type: 2}
+  silverObject: {fileID: 0}
 --- !u!4 &1752154006
 Transform:
   m_ObjectHideFlags: 0
