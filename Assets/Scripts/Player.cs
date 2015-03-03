@@ -94,13 +94,7 @@ public class Player : MonoBehaviour {
 		} else {
 			rigidbody2D.Sleep ();
 		}
-
-
-		//Finds distance to silver
-		var silver = GameObject.Find ("Silver");
-		if (silver != null){
-			silverDamage (silver);
-		}
+		
 	}	
 	
 	void TransformNPCCheck(){
@@ -131,20 +125,5 @@ public class Player : MonoBehaviour {
 
 	}
 
-	//Determines if the player is close enough to specified silver to deal damage, and carries it out
-	void silverDamage(GameObject silver){
-		var health = GameObject.Find ("Health");
-		float distance = Vector3.Distance (this.transform.position, silver.transform.position);
-		var healthScript = health.GetComponent<Health>();
-		Debug.Log(healthScript.current_health);
-		if (distance < 1) {
-			healthScript.decreaseBy (1.0f);
-		} else if (distance < 2) {
-			healthScript.decreaseBy (0.5f);
-		} else if (distance < 3) {
-			healthScript.decreaseBy (0.25f);
-		} else if (distance < 5) {
-			healthScript.decreaseBy (0.1f);
-		}
-	}
+
 }

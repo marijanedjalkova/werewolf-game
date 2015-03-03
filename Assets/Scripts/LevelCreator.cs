@@ -10,10 +10,12 @@ public class LevelCreator : MonoBehaviour {
 	public GameObject tilemapObject;
 	public GameObject tileObject;
 	public GameObject npcObject;
+	public GameObject silverObject;
 
 	Tilemap tilemap;
 
 	List<NPC> npcList;
+	List<Silver> silverList;
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +40,17 @@ public class LevelCreator : MonoBehaviour {
 			npcList[i].SetCurrentTile(currentTile);
 			npcList[i].SetLocation (new Vector3(currentTile.x,currentTile.y,-1));
 
+		}
+
+		silverList = new List<Silver> ();
+		for (int i = 0; i < numberOfNPC/2; i++) {
+			GameObject tempSilverObject = Instantiate(silverObject) as GameObject;
+			tempSilverObject.transform.parent = this.transform;
+			tempSilverObject.layer = LayerMask.NameToLayer("Silver");
+
+			silverList.Add(tempSilverObject.GetComponent<Silver>());
+			Tile currentTile = tilemap.RandomStartNPC();
+			silverList[i].SetLocation(new Vector3(currentTile.x,currentTile.y,-1));
 		}
 
 	}
