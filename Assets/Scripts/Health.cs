@@ -12,16 +12,10 @@ public class Health : MonoBehaviour
 	public GUIStyle progress_empty, progress_full;
 	public float current_health=100.0f;
 
-	//Increases the current health by value 
 	public void increaseBy(float value){
 		current_health += value;
 	}
 
-	//Decreases the current health by value
-	public void decreaseBy(float value){
-		current_health -= value;
-	}
-	
 	void OnGUI() {
 		//draw the background:
 		GUI.BeginGroup (new Rect (pos.x, pos.y, size.x, size.y));
@@ -33,7 +27,14 @@ public class Health : MonoBehaviour
 		GUI.EndGroup ();
 		GUI.EndGroup ();
 	}
+
+
+	//Decreases the current health by value
+	public void decreaseBy(float value){
+		current_health -= value;
+	}
 	
+
 	// Use this for initialization
 	void Start ()
 	{

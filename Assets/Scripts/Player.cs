@@ -9,6 +9,8 @@ public class Player : MonoBehaviour {
 
 	public Hunger hunger_bar;
 
+	public Health health_bar;
+
 	Animator anim;
 
 	public bool transformed = false;
