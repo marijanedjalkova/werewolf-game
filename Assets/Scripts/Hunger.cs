@@ -18,6 +18,7 @@ public class Hunger : MonoBehaviour
 	
 	void OnGUI() {
 				//draw the background:
+				GUI.Label(new Rect(20, 0, 120, 40), "Hunger progress");
 				GUI.BeginGroup (new Rect (pos.x, pos.y, size.x, size.y));
 				GUI.Box (new Rect (0, 0, size.x, size.y), emptyTex);
 		

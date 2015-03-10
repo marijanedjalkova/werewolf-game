@@ -18,6 +18,7 @@ public class Health : MonoBehaviour
 
 	void OnGUI() {
 		//draw the background:
+		GUI.Label(new Rect(160, 0, 120, 40), "Health");
 		GUI.BeginGroup (new Rect (pos.x, pos.y, size.x, size.y));
 		GUI.Box (new Rect (0, 0, size.x, size.y), deadTex);
 		
