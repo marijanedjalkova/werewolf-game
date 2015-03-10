@@ -122,32 +122,29 @@ public class Player : MonoBehaviour {
 
 		}
 	}
-
+	//KILLING HERE
 	void OnTriggerEnter2D(Collider2D coll){
-
-		if (coll.gameObject.name == "NPC(Clone)" && transformed){
-			NPC npc = coll.gameObject.GetComponent<NPC>();
-			npc.TakeDamage (100);
-			hunger_bar.increaseBy(0.05f);
+		if(Input.GetKey(KeyCode.Q)){
+			if (coll.gameObject.name == "NPC(Clone)" && transformed){
+				NPC npc = coll.gameObject.GetComponent<NPC>();
+				npc.TakeDamage (100);
+				hunger_bar.increaseBy(0.05f);
+			}
 		}
-
 
 	}
 
 	//Determines if the player is close enough to specified silver to deal damage, and carries it out
 	void silverDamage(GameObject silver){
-		var health = GameObject.Find ("Health");
 		float distance = Vector3.Distance (this.transform.position, silver.transform.position);
-		var healthScript = health.GetComponent<Health>();
-		Debug.Log(healthScript.current_health);
 		if (distance < 1) {
-			healthScript.decreaseBy (1.0f);
+			health_bar.decreaseBy (1.0f);
 		} else if (distance < 2) {
-			healthScript.decreaseBy (0.5f);
+			health_bar.decreaseBy (0.5f);
 		} else if (distance < 3) {
-			healthScript.decreaseBy (0.25f);
+			health_bar.decreaseBy (0.25f);
 		} else if (distance < 5) {
-			healthScript.decreaseBy (0.1f);
+			health_bar.decreaseBy (0.1f);
 		}
 	}
 }
