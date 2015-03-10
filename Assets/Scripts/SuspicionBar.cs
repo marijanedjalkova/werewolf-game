@@ -59,9 +59,15 @@ public class SuspicionBar : MonoBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
-		barDisplay = susp_level;
+			barDisplay = susp_level;
+		}
 
+	public float get_suspicion(){
+		return susp_level;
+	}
 
+	public void set_suspicion(float susp){
+		susp_level = susp;
 	}
 }
 

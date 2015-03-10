@@ -116,7 +116,7 @@ public class Player : MonoBehaviour {
 			                                     new Vector2(npc.transform.position.x, npc.transform.position.y));
 			
 			if ((new Vector2(this.transform.position.x, this.transform.position.y) - hit.point).magnitude <= 1){
-				npc.suspicion = 100;
+				npc.suspicion_bar.set_suspicion(1.0f);
 
 			}
 

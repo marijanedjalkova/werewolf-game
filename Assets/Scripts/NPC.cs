@@ -19,17 +19,13 @@ public class NPC : MonoBehaviour {
 	public List<Tile> currentPath;
 
 	public int health = 100;
-	public int suspicion = 0;
 
 	private bool scared = false;
 	private bool fighting = false;
 	private bool fleeing = false;
 
 	private int timeSinceLastSighting;
-
-	public int getSuspicionRate(){
-		return suspicion;
-	}
+	public SuspicionBar suspicion_bar;
 
 	// Use this for initialization
 	void Start () {
@@ -37,12 +33,13 @@ public class NPC : MonoBehaviour {
 		velocity = new Vector2 (0.0f, 0.0f);
 		currentPath = new List<Tile>();
 		speed = baseSpeed;
+		suspicion_bar = new SuspicionBar ();
 
 	}
 
 	void Update(){
 
-		if (this.suspicion >= 90){
+		if (this.suspicion_bar.get_suspicion() >= 90){
 			AlertNPCS();
 		}
 
@@ -188,8 +185,8 @@ public class NPC : MonoBehaviour {
 		NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
 		foreach(NPC npc in npcs){
 			if ((npc.transform.position - this.transform.position).magnitude < 6){
-				npc.suspicion = Mathf.Max (this.suspicion, npc.suspicion);
-				this.suspicion = Mathf.Max (this.suspicion, npc.suspicion);
+				npc.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
+				this.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
 			}
 		}
 	}
