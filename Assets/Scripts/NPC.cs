@@ -116,11 +116,10 @@ public class NPC : MonoBehaviour {
 	void FightOrFlight(){
 
 		this.Stop();
-		Debug.Log ("Oh shit!");
+
 		if (!player.transformed){
 			scared = true;
 			fighting = true;
-			Debug.Log ("It's on Now.");
 		
 		} else {
 
@@ -176,7 +175,6 @@ public class NPC : MonoBehaviour {
 
 		if ((player.GetLocation()-this.GetLocation ()).magnitude <= this.attackRadius){
 
-			Debug.Log ("Take that!");
 			currentCooldown = 0;
 			player.TakeDamage(10);
 
