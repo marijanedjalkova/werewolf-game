@@ -11,6 +11,8 @@ public class Player : MonoBehaviour {
 
 	public Health health_bar;
 
+	public int health = 100;
+
 	Animator anim;
 
 	public bool transformed = false;
@@ -102,10 +104,14 @@ public class Player : MonoBehaviour {
 		//Finds distance to silver
 		var silver = GameObject.Find ("Silver");
 		if (silver != null){
-			silverDamage (silver);
+			SilverDamage (silver);
 		}
 	}	
-	
+
+	public Vector2 GetLocation(){
+		return new Vector2(this.transform.position.x, this.transform.position.y);
+	}
+
 	void TransformNPCCheck(){
 
 		NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
@@ -134,8 +140,15 @@ public class Player : MonoBehaviour {
 
 	}
 
+	public void TakeDamage(int damageAmount){
+		this.health -= damageAmount;
+		if (this.health <= 0){
+			Die ();
+		}
+	}
+
 	//Determines if the player is close enough to specified silver to deal damage, and carries it out
-	void silverDamage(GameObject silver){
+	void SilverDamage(GameObject silver){
 		float distance = Vector3.Distance (this.transform.position, silver.transform.position);
 		if (distance < 1) {
 			health_bar.decreaseBy (1.0f);
@@ -146,5 +159,14 @@ public class Player : MonoBehaviour {
 		} else if (distance < 5) {
 			health_bar.decreaseBy (0.1f);
 		}
+	}
+
+	void Die(){
+
+		//GameObject body = GameObject.Instantiate(deadNPC) as GameObject;
+		//body.transform.position = this.transform.position;
+
+		this.GetComponentInChildren<Camera>().transform.parent = null;
+		Destroy(this.gameObject);
 	}
 }

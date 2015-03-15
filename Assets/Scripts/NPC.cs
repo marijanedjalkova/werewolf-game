@@ -10,6 +10,7 @@ public class NPC : MonoBehaviour {
 	public float baseSpeed = 0.0f;
 	private float speed;
 
+	public float attackRadius = 2f;
 	public float chanceToChangeRooms = 0f;
 	public float wanderChance = 0f;
 
@@ -27,6 +28,9 @@ public class NPC : MonoBehaviour {
 	private int timeSinceLastSighting;
 	public SuspicionBar suspicion_bar;
 
+	private float attackCooldown = 1; // time between attacks in seconds
+	private float currentCooldown = 0;
+
 	// Use this for initialization
 	void Start () {
 
@@ -39,55 +43,23 @@ public class NPC : MonoBehaviour {
 
 	void Update(){
 
-		if (this.suspicion_bar.get_suspicion() >= 90){
-			AlertNPCS();
-		}
+		currentCooldown = Mathf.Min(currentCooldown+ Time.deltaTime, 10);
 
-		if (this.IsWerewolfVisible()){
+		AlertNPCS();
 
-			if (!scared){
-				scared = true;
-				this.FightOrFlight();
-				if (fleeing){
-					speed = 1.5f*baseSpeed;
-				}
-			} else if (timeSinceLastSighting > 0) {
-					UpdatePath();
-
-			}
-			timeSinceLastSighting = 0;
-
-		} else {
-
-			timeSinceLastSighting++;
-			if (timeSinceLastSighting > 500){
-				scared = false;
-				fighting = false;
-				fleeing = false;
-				speed = baseSpeed;
-			}
-
-		}
+		WerewolfCheck();
 
 		if (!scared){
 			// If the currentPath is empty, there is a chance every frame to start to move to a random tile. (moveChance%)
 			if (currentPath.Count == 0){
-
-				float chanceToWander = Random.Range (0.0f, 100f);
-				if (chanceToWander < wanderChance){
-					currentPath.Add (currentTile.GetRandomNeighbour());
-				} else {
-
-					float chanceToMove = Random.Range(0.0f, 100.0f);
-					if (chanceToMove <= chanceToChangeRooms){
-						currentPath = tilemap.GetRandomPath(currentTile);
-					}
-				}
+				Wander();
 			}
 		} else {
 
 			if (fighting){
 
+				MoveToPlayer();
+				AttackPlayer();
 
 			} else {
 				if (currentPath.Count == 0){
@@ -95,7 +67,6 @@ public class NPC : MonoBehaviour {
 				}
 
 			}
-
 		}
 	}
 
@@ -109,19 +80,59 @@ public class NPC : MonoBehaviour {
 		}
 	}
 
+	void WerewolfCheck(){
+
+		if (player == null){
+			return;
+		}
+
+		if (this.IsWerewolfVisible()){
+
+			if (!scared){
+				scared = true;
+				FightOrFlight();
+				if (fleeing){
+					speed = 1.5f*baseSpeed;
+				}
+			} else if (timeSinceLastSighting > 0) {
+				UpdatePath();
+			}
+			timeSinceLastSighting = 0;
+			
+		} else {
+			
+			timeSinceLastSighting++;
+			if (timeSinceLastSighting > 500){
+				scared = false;
+				fighting = false;
+				fleeing = false;
+				speed = baseSpeed;
+			}
+			
+		}
+
+	}
+
 	void FightOrFlight(){
 
-		this.Stop ();
-
-		int x = 1;
-		float chanceToFight = (x-1)/x;
-
-		float outcome = Random.Range (0.0f, 1.0f);
-
-		if (outcome < chanceToFight){
+		this.Stop();
+		Debug.Log ("Oh shit!");
+		if (!player.transformed){
+			scared = true;
 			fighting = true;
+			Debug.Log ("It's on Now.");
+		
 		} else {
-			fleeing = true;
+
+			float x = 1.5f;
+			float chanceToFight = (x-1)/x;
+			float outcome = Random.Range (0.0f, 1.0f);
+
+			if (outcome < chanceToFight){
+				fighting = true;
+			} else {
+				fleeing = true;
+			}
 		}
 	}
 
@@ -129,6 +140,47 @@ public class NPC : MonoBehaviour {
 		velocity = new Vector2 (0.0f, 0.0f);
 		this.rigidbody2D.Sleep ();
 		currentPath = new List<Tile>();
+	}
+
+	void Wander(){
+
+		float chanceToWander = Random.Range (0.0f, 100f);
+		if (chanceToWander < wanderChance){
+			currentPath.Add (currentTile.GetRandomNeighbour());
+		} else {
+			
+			float chanceToMove = Random.Range(0.0f, 100.0f);
+			if (chanceToMove <= chanceToChangeRooms){
+				currentPath = tilemap.GetRandomPath(currentTile);
+			}
+		}
+
+	}
+
+	void MoveToPlayer(){
+
+		if (player == null){
+			return;
+		}
+
+		if (currentPath.Count == 0){
+			currentPath = tilemap.GetPath (currentTile, tilemap.GetClosestTile(player.GetLocation()).GetRandomNeighbour());
+		}
+
+	}
+	void AttackPlayer(){
+
+		if (player == null || currentCooldown <= attackCooldown){
+			return;
+		}
+
+		if ((player.GetLocation()-this.GetLocation ()).magnitude <= this.attackRadius){
+
+			Debug.Log ("Take that!");
+			currentCooldown = 0;
+			player.TakeDamage(10);
+
+		}
 	}
 
 	// Update is called once per frame
@@ -182,32 +234,48 @@ public class NPC : MonoBehaviour {
 
 	void AlertNPCS(){
 
-		NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
-		foreach(NPC npc in npcs){
-			if ((npc.transform.position - this.transform.position).magnitude < 6){
-				npc.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
-				this.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
+		if (this.suspicion_bar.get_suspicion() >= 0.9f){
+
+			NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
+			foreach(NPC npc in npcs){
+
+				if ((npc.transform.position - this.transform.position).magnitude < 6){
+
+					npc.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
+					this.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
+
+				}
+
 			}
 		}
+
 	}
 
 	bool IsWerewolfVisible(){
 
-		if (!player.transformed)
+		if (player == null){
 			return false;
-
+		}
+		
 		RaycastHit2D hit = Physics2D.Raycast(new Vector2(this.transform.position.x, this.transform.position.y),
 		                                     new Vector2(player.transform.position.x, player.transform.position.y)-
 		                                     new Vector2(this.transform.position.x, this.transform.position.y));
 		
 		if ((new Vector2(player.transform.position.x, player.transform.position.y) - hit.point).magnitude <= 1){
-			return true;
+
+			if (player.transformed || this.suspicion_bar.get_suspicion() >= 0.9f){
+				return true;
+			}
 		}
 		return false;
 	}
 
 	public void SetLocation(Vector3 loc){
 		this.transform.position = loc;
+	}
+
+	public Vector2 GetLocation(){
+		return new Vector2(this.transform.position.x, this.transform.position.y);
 	}
 
 	public void SetTilemap(Tilemap t){

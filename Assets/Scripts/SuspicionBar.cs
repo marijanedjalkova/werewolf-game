@@ -12,7 +12,6 @@ public class SuspicionBar : MonoBehaviour
 	public Texture2D fullTex;
 	public GUIStyle progress_empty, progress_full;
 	public float susp_level=0.0f;
-	public RectTransform rectTransform;
 
 	private NPC parent_npc;
 	

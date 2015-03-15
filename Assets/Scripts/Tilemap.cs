@@ -412,7 +412,6 @@ public class Tilemap : MonoBehaviour {
 		return rooms[Random.Range (0,rooms.Count)].RandomTile();
 	}
 
-	
 	public List<Tile> ReconstructPath(Dictionary<Tile, Tile> cameFrom, Tile current){
 		List<Tile> path = new List<Tile>();
 
@@ -446,6 +445,24 @@ public class Tilemap : MonoBehaviour {
 
 	public Tile GetTile(int x, int y){
 		return tiles[new Id(x, y)];
+	}
+
+	public Tile GetClosestTile(Vector2 location){
+
+		Tile closestTile = null;
+		float shortestDistance = float.MaxValue;
+
+		foreach (KeyValuePair<Id, Tile> t in tiles){
+			if (t.Value.pathable){
+				float distance = (location - t.Value.GetLocation()).magnitude;
+				if (distance < shortestDistance){
+					shortestDistance = distance;
+					closestTile = t.Value;
+				}
+			}
+		}
+
+		return closestTile;
 	}
 
 }
