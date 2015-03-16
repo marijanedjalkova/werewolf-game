@@ -53,6 +53,7 @@ public class Player : MonoBehaviour {
 				anim.SetBool ("wolfForm", false);
 				transformed = false;
 				transformation_On_CD = true;
+				TransformNPCCheck();
 			}
 		}
 

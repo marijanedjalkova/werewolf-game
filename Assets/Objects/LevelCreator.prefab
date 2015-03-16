@@ -39,12 +39,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e6b51d025ed58946b1ad3d5c7fa5b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: 15
-  numberOfNPC: 15
+  mapSize: 10
+  numberOfNPC: 25
   playerObject: {fileID: 0}
   tilemapObject: {fileID: 100000, guid: 48262a3c205986e49952fdbe6bedaaf3, type: 2}
   tileObject: {fileID: 100000, guid: 439260824df878e47abf9a018e992c09, type: 2}
   npcObject: {fileID: 100002, guid: 923d435dc0a8e70429bae44b453e01ce, type: 2}
+  silverObject: {fileID: 106180, guid: 234fa538738e0524fac6efff2272045b, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -12,10 +12,10 @@ public class Silver : MonoBehaviour {
 	void Update () {
 		var health = GameObject.Find ("Health");
 		var player = GameObject.Find ("Player");
-		var isTransformed = player.GetComponent<Animator> ().GetBool ("wolfForm");
+		bool isTransformed = player.transform;
 		float distance = Vector3.Distance (player.transform.position, this.transform.position);
 		var healthScript = health.GetComponent<Health>();
-		Debug.Log(healthScript.current_health);
+
 		if (isTransformed) {
 			if (distance < 1) {
 				healthScript.decreaseBy (1.0f);

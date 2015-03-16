@@ -21,9 +21,9 @@ public class NPC : MonoBehaviour {
 
 	public int health = 100;
 
-	private bool scared = false;
-	private bool fighting = false;
-	private bool fleeing = false;
+	public bool scared = false;
+	public bool fighting = false;
+	public bool fleeing = false;
 
 	private int timeSinceLastSighting;
 	public SuspicionBar suspicion_bar;
@@ -37,7 +37,7 @@ public class NPC : MonoBehaviour {
 		velocity = new Vector2 (0.0f, 0.0f);
 		currentPath = new List<Tile>();
 		speed = baseSpeed;
-		suspicion_bar = new SuspicionBar ();
+		suspicion_bar = this.GetComponent <SuspicionBar> ();
 
 	}
 
@@ -57,7 +57,7 @@ public class NPC : MonoBehaviour {
 		} else {
 
 			if (fighting){
-
+				GetNeigboursToFight();
 				MoveToPlayer();
 				AttackPlayer();
 
@@ -129,13 +129,31 @@ public class NPC : MonoBehaviour {
 
 			if (outcome < chanceToFight){
 				fighting = true;
+				GetNeigboursToFight();
 			} else {
 				fleeing = true;
 			}
 		}
 	}
 
-	void Stop(){
+	void GetNeigboursToFight(){
+
+		NPC[] npcs = GameObject.FindObjectsOfType(this.GetType()) as NPC[];
+
+		for (int i = 0; i < npcs.Length; i++){
+		
+			NPC npc = npcs[i];
+
+			if (!npc.fighting && (this.GetLocation() - npc.GetLocation()).magnitude <= 5){
+				npc.fighting = true;
+				npc.Stop ();
+			}
+
+		}
+
+	}
+
+	public void Stop(){
 		velocity = new Vector2 (0.0f, 0.0f);
 		this.rigidbody2D.Sleep ();
 		currentPath = new List<Tile>();

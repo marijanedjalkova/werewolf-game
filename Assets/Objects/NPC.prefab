@@ -72,14 +72,18 @@ MonoBehaviour:
   deadNPC: {fileID: 100000, guid: 952cd813b0cbd9b4299182c3fd57690f, type: 2}
   player: {fileID: 0}
   velocity: {x: 0, y: 0}
-  baseSpeed: 5
+  baseSpeed: 3.33333325
+  attackRadius: 2
   chanceToChangeRooms: .100000001
   wanderChance: .5
   tilemap: {fileID: 0}
   currentTile: {fileID: 0}
   currentPath: []
   health: 100
-  suspicion: 0
+  scared: 0
+  fighting: 0
+  fleeing: 0
+  suspicion_bar: {fileID: 0}
 --- !u!114 &11465078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -216,7 +220,6 @@ MonoBehaviour:
     m_StretchWidth: 1
     m_StretchHeight: 0
   susp_level: 0
-  rectTransform: {fileID: 0}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
