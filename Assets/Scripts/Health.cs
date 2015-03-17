@@ -47,7 +47,7 @@ public class Health : MonoBehaviour
 	{
 		barDisplay = current_health;
 		if (current_health <= 0) {
-			Application.LoadLevel("won_level"); //Todo add losing level
+			Application.LoadLevel("lost_level");
 		}
 		
 	}
