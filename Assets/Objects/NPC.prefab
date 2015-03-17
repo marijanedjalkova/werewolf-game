@@ -98,9 +98,9 @@ MonoBehaviour:
   barDisplay: 0
   pos: {x: 0, y: 0}
   ViewportPoint: {x: 0, y: 0}
-  size: {x: 10, y: 5}
-  emptyTex: {fileID: 2800000, guid: 5130e62c72f96604291fd66252aeab06, type: 3}
-  fullTex: {fileID: 2800000, guid: 3c443cff85e406949afae59b7844a8a6, type: 3}
+  size: {x: 45, y: 15}
+  emptyTex: {fileID: 2800000, guid: 6263275b412482d43a5e884cae3c09d0, type: 3}
+  fullTex: {fileID: 2800000, guid: 9f88b6ff5f907254fb21b03f6bb51cba, type: 3}
   progress_empty:
     m_Name: 
     m_Normal:

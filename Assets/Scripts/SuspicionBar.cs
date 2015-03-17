@@ -7,7 +7,7 @@ public class SuspicionBar : MonoBehaviour
 	public float barDisplay; //current progress
 	public Vector2 pos;
 	public Vector2 ViewportPoint;
-	public Vector2 size = new Vector2(120,80);
+	public Vector2 size = new Vector2(45,15);
 	public Texture2D emptyTex;
 	public Texture2D fullTex;
 	public GUIStyle progress_empty, progress_full;
@@ -31,8 +31,8 @@ public class SuspicionBar : MonoBehaviour
 	void OnGUI() {
 		//draw the background:
 		pos = this.transform.position;
-		pos.x -= 0.25f;// get the game object position
-		pos.y += 0.6f;
+		pos.x -= 0.75f;// get the game object position
+		pos.y += 1.0f;
 		ViewportPoint = Camera.main.WorldToViewportPoint(pos);  //convert game object position to VievportPoint
 		
 		GUI.BeginGroup (new Rect (ViewportPoint.x*Camera.main.pixelWidth, Camera.main.pixelHeight - ViewportPoint.y*Camera.main.pixelHeight, size.x, size.y));

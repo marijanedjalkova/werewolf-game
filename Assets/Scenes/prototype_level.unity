@@ -105,8 +105,8 @@ MonoBehaviour:
   barDisplay: 1
   pos: {x: 160, y: 20}
   size: {x: 120, y: 40}
-  deadTex: {fileID: 2800000, guid: 11d0988d0dc19cd4ba78faeb41713b5d, type: 3}
-  healthyTex: {fileID: 2800000, guid: 5130e62c72f96604291fd66252aeab06, type: 3}
+  deadTex: {fileID: 2800000, guid: e4c8fd421be77534a8444ae98c31be77, type: 3}
+  healthyTex: {fileID: 2800000, guid: 9f88b6ff5f907254fb21b03f6bb51cba, type: 3}
   progress_empty:
     m_Name: 
     m_Normal:
@@ -595,8 +595,8 @@ MonoBehaviour:
   barDisplay: 0
   pos: {x: 20, y: 20}
   size: {x: 120, y: 40}
-  emptyTex: {fileID: 2800000, guid: 11d0988d0dc19cd4ba78faeb41713b5d, type: 3}
-  fullTex: {fileID: 2800000, guid: e5e00db2161f4c34897feb461411c9b2, type: 3}
+  emptyTex: {fileID: 2800000, guid: e4c8fd421be77534a8444ae98c31be77, type: 3}
+  fullTex: {fileID: 2800000, guid: 6bafd436131a73941b0d520b243c305a, type: 3}
   progress_empty:
     m_Name: 
     m_Normal:
