@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 
 	public Health health_bar;
 
-	public int health = 100;
+	public float health = 100f;
 
 	Animator anim;
 
@@ -141,10 +141,11 @@ public class Player : MonoBehaviour {
 
 	}
 
-	public void TakeDamage(int damageAmount){
+	public void TakeDamage(float damageAmount){
+		health_bar.decreaseBy (damageAmount);
 		this.health -= damageAmount;
-		if (this.health <= 0){
-			Die ();
+		if (this.health <= 0f){
+			health = 0f;
 		}
 	}
 

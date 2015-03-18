@@ -11,3 +11,5 @@ EditorBuildSettings:
     path: Assets/Scenes/prototype_level.unity
   - enabled: 1
     path: Assets/Scenes/won_level.unity
+  - enabled: 1
+    path: Assets/Scenes/lost_level.unity
