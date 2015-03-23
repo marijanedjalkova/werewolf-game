@@ -13,7 +13,9 @@ public class Player : MonoBehaviour {
 
 	public float health = 100f;
 
-	Animator anim;
+	public Animator anim;
+
+	public NorthTrigger ntr;
 
 	public bool transformed = false;
 	private bool transformation_On_CD = false;
@@ -21,7 +23,6 @@ public class Player : MonoBehaviour {
 	private int TRANSFORM_CD_TIME = 100;
 
 	void Start(){
-
 		anim = GetComponent<Animator> ();
 		anim.SetBool ("wolfForm", false);
 		anim.SetBool ("up", false);
@@ -129,17 +130,13 @@ public class Player : MonoBehaviour {
 
 		}
 	}
-	//KILLING HERE
-	void OnTriggerEnter2D(Collider2D coll){
-		if(Input.GetKey(KeyCode.Q)){
-			if (coll.gameObject.name == "NPC(Clone)" && transformed){
-				NPC npc = coll.gameObject.GetComponent<NPC>();
-				npc.TakeDamage (100);
-				hunger_bar.increaseBy(0.05f);
-			}
-		}
 
+	public void kill(Collider2D npc){
+		NPC to_kill = npc.gameObject.GetComponent<NPC>();
+		to_kill.TakeDamage (100);
+		hunger_bar.increaseBy(0.05f);
 	}
+
 
 	public void TakeDamage(float damageAmount){
 		health_bar.decreaseBy (damageAmount);

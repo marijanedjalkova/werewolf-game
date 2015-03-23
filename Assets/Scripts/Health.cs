@@ -10,11 +10,13 @@ public class Health : MonoBehaviour
 	public Texture2D deadTex;
 	public Texture2D healthyTex;
 	public GUIStyle progress_empty, progress_full;
-	public float current_health=100.0f;
+	public float current_health=0.0f;
 
 	public void increaseBy(float value){
 		current_health += value;
 	}
+
+
 
 	void OnGUI() {
 		//draw the background:
