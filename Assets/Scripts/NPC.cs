@@ -31,8 +31,20 @@ public class NPC : MonoBehaviour {
 	private float attackCooldown = 1; // time between attacks in seconds
 	private float currentCooldown = 0;
 
+	Animator anim;
+
+
 	// Use this for initialization
 	void Start () {
+
+		anim = GetComponent<Animator> ();
+		anim.SetBool ("NPC", true);
+		anim.SetBool ("wolfForm", false);
+		anim.SetBool ("up", false);
+		anim.SetBool ("down", false);
+		anim.SetBool ("left", false);
+		anim.SetBool ("right", false);
+		anim.SetBool ("Move", false);
 
 		velocity = new Vector2 (0.0f, 0.0f);
 		currentPath = new List<Tile>();
@@ -245,6 +257,41 @@ public class NPC : MonoBehaviour {
 			} else {
 				this.rigidbody2D.velocity = (this.velocity);
 			}
+
+			if(this.rigidbody2D.velocity.x >= 0.1 || this.rigidbody2D.velocity.x <= -0.1){
+				anim.SetBool ("Move", true);
+				if(this.rigidbody2D.velocity.x < 0){
+					anim.SetBool ("left", true);
+					anim.SetBool ("right", false);
+					anim.SetBool ("up", false);
+					anim.SetBool ("down", false);
+				}
+				else if(this.rigidbody2D.velocity.x > 0){
+					anim.SetBool ("right", true);
+					anim.SetBool ("left", false);
+					anim.SetBool ("up", false);
+					anim.SetBool ("down", false);
+				}
+			}
+			else if(this.rigidbody2D.velocity.y >= 0.1 || this.rigidbody2D.velocity.y <= -0.1){
+				anim.SetBool ("Move", true);
+				if(this.rigidbody2D.velocity.y < 0){
+					anim.SetBool ("up", true);
+					anim.SetBool ("down", false);
+					anim.SetBool ("right", false);
+					anim.SetBool ("left", false);
+				}
+				else if(this.rigidbody2D.velocity.y > 0){
+					anim.SetBool ("down", true);
+					anim.SetBool ("up", false);
+					anim.SetBool ("right", false);
+					anim.SetBool ("left", false);
+				}
+			}
+			else{
+				anim.SetBool ("Move", false);
+			}
+
 		}
 	}
 

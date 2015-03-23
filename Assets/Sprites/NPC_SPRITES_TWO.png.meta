@@ -1,23 +1,23 @@
 fileFormatVersion: 2
-guid: 906470e36e2c18b418e38c0114136798
+guid: 10cdf3527e4929940bd5d24ec584ac0b
 TextureImporter:
   fileIDToRecycleName:
-    21300000: NPC_SPRITES_THREE_0
-    21300002: NPC_SPRITES_THREE_1
-    21300004: NPC_SPRITES_THREE_2
-    21300006: NPC_SPRITES_THREE_3
-    21300008: NPC_SPRITES_THREE_4
-    21300010: NPC_SPRITES_THREE_5
-    21300012: NPC_SPRITES_THREE_6
-    21300014: NPC_SPRITES_THREE_7
-    21300016: NPC_SPRITES_THREE_8
-    21300018: NPC_SPRITES_THREE_9
-    21300020: NPC_SPRITES_THREE_10
-    21300022: NPC_SPRITES_THREE_11
-    21300024: NPC_SPRITES_THREE_12
-    21300026: NPC_SPRITES_THREE_13
-    21300028: NPC_SPRITES_THREE_14
-    21300030: NPC_SPRITES_THREE_15
+    21300000: NPC_SPRITES_TWO_0
+    21300002: NPC_SPRITES_TWO_1
+    21300004: NPC_SPRITES_TWO_2
+    21300006: NPC_SPRITES_TWO_3
+    21300008: NPC_SPRITES_TWO_4
+    21300010: NPC_SPRITES_TWO_5
+    21300012: NPC_SPRITES_TWO_6
+    21300014: NPC_SPRITES_TWO_7
+    21300016: NPC_SPRITES_TWO_8
+    21300018: NPC_SPRITES_TWO_9
+    21300020: NPC_SPRITES_TWO_10
+    21300022: NPC_SPRITES_TWO_11
+    21300024: NPC_SPRITES_TWO_12
+    21300026: NPC_SPRITES_TWO_13
+    21300028: NPC_SPRITES_TWO_14
+    21300030: NPC_SPRITES_TWO_15
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -59,7 +59,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: NPC_SPRITES_THREE_0
+    - name: NPC_SPRITES_TWO_0
       rect:
         serializedVersion: 2
         x: 0
@@ -69,7 +69,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_1
+    - name: NPC_SPRITES_TWO_1
       rect:
         serializedVersion: 2
         x: 96
@@ -79,7 +79,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_2
+    - name: NPC_SPRITES_TWO_2
       rect:
         serializedVersion: 2
         x: 192
@@ -89,7 +89,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_3
+    - name: NPC_SPRITES_TWO_3
       rect:
         serializedVersion: 2
         x: 288
@@ -99,7 +99,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_4
+    - name: NPC_SPRITES_TWO_4
       rect:
         serializedVersion: 2
         x: 0
@@ -109,7 +109,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_5
+    - name: NPC_SPRITES_TWO_5
       rect:
         serializedVersion: 2
         x: 96
@@ -119,7 +119,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_6
+    - name: NPC_SPRITES_TWO_6
       rect:
         serializedVersion: 2
         x: 192
@@ -129,7 +129,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_7
+    - name: NPC_SPRITES_TWO_7
       rect:
         serializedVersion: 2
         x: 288
@@ -139,7 +139,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_8
+    - name: NPC_SPRITES_TWO_8
       rect:
         serializedVersion: 2
         x: 0
@@ -149,7 +149,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_9
+    - name: NPC_SPRITES_TWO_9
       rect:
         serializedVersion: 2
         x: 96
@@ -159,7 +159,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_10
+    - name: NPC_SPRITES_TWO_10
       rect:
         serializedVersion: 2
         x: 192
@@ -169,7 +169,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_11
+    - name: NPC_SPRITES_TWO_11
       rect:
         serializedVersion: 2
         x: 288
@@ -179,7 +179,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_12
+    - name: NPC_SPRITES_TWO_12
       rect:
         serializedVersion: 2
         x: 0
@@ -189,7 +189,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_13
+    - name: NPC_SPRITES_TWO_13
       rect:
         serializedVersion: 2
         x: 96
@@ -199,7 +199,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_14
+    - name: NPC_SPRITES_TWO_14
       rect:
         serializedVersion: 2
         x: 192
@@ -209,7 +209,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: NPC_SPRITES_THREE_15
+    - name: NPC_SPRITES_TWO_15
       rect:
         serializedVersion: 2
         x: 288
