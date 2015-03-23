@@ -18,13 +18,13 @@ public class Silver : MonoBehaviour {
 
 		if (isTransformed) {
 			if (distance < 1) {
-				healthScript.decreaseBy (1.0f);
-			} else if (distance < 2) {
-				healthScript.decreaseBy (0.5f);
-			} else if (distance < 3) {
-				healthScript.decreaseBy (0.25f);
-			} else if (distance < 5) {
 				healthScript.decreaseBy (0.1f);
+			} else if (distance < 2) {
+				healthScript.decreaseBy (0.05f);
+			} else if (distance < 3) {
+				healthScript.decreaseBy (0.025f);
+			} else if (distance < 5) {
+				healthScript.decreaseBy (0.001f);
 			}
 		}
 	}
