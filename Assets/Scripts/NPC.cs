@@ -206,9 +206,12 @@ public class NPC : MonoBehaviour {
 		if ((player.GetLocation()-this.GetLocation ()).magnitude <= this.attackRadius){
 
 			currentCooldown = 0;
+			anim.SetBool ("NPCAttack", true);
 			player.TakeDamage(10f);
 
 		}
+		else
+			anim.SetBool ("NPCAttack", false);
 	}
 
 	// Update is called once per frame
@@ -271,21 +274,24 @@ public class NPC : MonoBehaviour {
 					anim.SetBool ("left", false);
 					anim.SetBool ("up", false);
 					anim.SetBool ("down", false);
+
 				}
 			}
-			else if(this.rigidbody2D.velocity.y >= 0.1 || this.rigidbody2D.velocity.y <= -0.1){
+			if(this.rigidbody2D.velocity.y >= 0.1 || this.rigidbody2D.velocity.y <= -0.1){
 				anim.SetBool ("Move", true);
-				if(this.rigidbody2D.velocity.y < 0){
+				if(this.rigidbody2D.velocity.y > 0){
 					anim.SetBool ("up", true);
 					anim.SetBool ("down", false);
 					anim.SetBool ("right", false);
 					anim.SetBool ("left", false);
+
 				}
-				else if(this.rigidbody2D.velocity.y > 0){
+				else if(this.rigidbody2D.velocity.y < 0){
 					anim.SetBool ("down", true);
 					anim.SetBool ("up", false);
 					anim.SetBool ("right", false);
 					anim.SetBool ("left", false);
+
 				}
 			}
 			else{
