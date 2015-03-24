@@ -206,7 +206,7 @@ public class NPC : MonoBehaviour {
 		if ((player.GetLocation()-this.GetLocation ()).magnitude <= this.attackRadius){
 
 			currentCooldown = 0;
-			player.TakeDamage(10f);
+			player.TakeDamage(0.1f);
 
 		}
 	}
