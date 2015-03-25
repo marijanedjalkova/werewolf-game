@@ -12,18 +12,18 @@ public class Silver : MonoBehaviour {
 	void Update () {
 		var health = GameObject.Find ("Health");
 		var player = GameObject.Find ("Player");
-		bool isTransformed = player.transform;
 		float distance = Vector3.Distance (player.transform.position, this.transform.position);
 		var healthScript = health.GetComponent<Health>();
+		var playerScript = player.GetComponent<Player>();
 
-		if (isTransformed) {
-			if (distance < 1) {
-				healthScript.decreaseBy (0.1f);
+		if (playerScript.transformed) {
+			if (distance < 0.5) {
+				healthScript.decreaseBy (0.01f);
+			} else if (distance < 1) {
+				healthScript.decreaseBy (0.005f);
+			} else if (distance < 1.5) {
+				healthScript.decreaseBy (0.002f);
 			} else if (distance < 2) {
-				healthScript.decreaseBy (0.05f);
-			} else if (distance < 3) {
-				healthScript.decreaseBy (0.025f);
-			} else if (distance < 5) {
 				healthScript.decreaseBy (0.001f);
 			}
 		}

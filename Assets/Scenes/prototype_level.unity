@@ -225,7 +225,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
-  current_health: 100
+  current_health: 1
 --- !u!212 &4553220
 SpriteRenderer:
   m_ObjectHideFlags: 0
