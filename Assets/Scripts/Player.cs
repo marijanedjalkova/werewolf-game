@@ -45,6 +45,7 @@ public class Player : MonoBehaviour {
 		//Transformation Code		
 		if (Input.GetKey (KeyCode.Space) && !transformation_On_CD) {
 			if(anim.GetBool("wolfForm") == false){
+				audio.Play ();
 				anim.SetBool ("wolfForm", true);
 				transformed = true;
 				transformation_On_CD = true;
@@ -60,7 +61,7 @@ public class Player : MonoBehaviour {
 
 			bool move = false; 
 			velocity = new Vector2(0.0f, 0.0f);
-		if(Input.GetKey(KeyCode.D)){
+		if(Input.GetKey(KeyCode.D) || Input.GetKey (KeyCode.RightArrow)){
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("down", false);
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour {
 			velocity += new Vector2(playerSpeed, 0.0f);
 		}
 
-		if(Input.GetKey(KeyCode.A)){
+		if(Input.GetKey(KeyCode.A) || Input.GetKey (KeyCode.LeftArrow)){
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("down", false);
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour {
 			anim.SetBool ("left", true);
 			velocity -= new Vector2(playerSpeed, 0.0f);
 		}
-		if(Input.GetKey(KeyCode.W)){
+		if(Input.GetKey(KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
 			move = true;
 			anim.SetBool ("down", false);
 			anim.SetBool ("left", false);
@@ -85,7 +86,7 @@ public class Player : MonoBehaviour {
 			anim.SetBool ("up", true);
 			velocity += new Vector2( 0.0f, playerSpeed);
 		}
-		if(Input.GetKey(KeyCode.S)){
+		if(Input.GetKey(KeyCode.S) || Input.GetKey (KeyCode.DownArrow)){
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("left", false);

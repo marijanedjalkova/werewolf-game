@@ -53,6 +53,8 @@ public class LevelCreator : MonoBehaviour {
 			silverList[i].SetLocation(new Vector3(currentTile.x,currentTile.y,-1));
 		}
 
+		GameObject.FindObjectOfType<Music>().GetComponent<Music>().StartMusic();
+
 	}
 	// Update is called once per frame
 	void Update () {
