@@ -19,6 +19,13 @@ public class LevelCreator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Pulls the 
+		var passObject = GameObject.Find ("passingObject");
+		var helpScript = passObject.GetComponent<menuHelper>();
+		int map = helpScript.numRooms;
+		int npc = helpScript.numNPC;
+		mapSize = map;
+		numberOfNPC = npc;
 		
 		GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
 		tilemap = tempTilemapObject.GetComponent<Tilemap>();

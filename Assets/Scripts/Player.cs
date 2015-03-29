@@ -133,9 +133,12 @@ public class Player : MonoBehaviour {
 	}
 
 	public void kill(Collider2D npc){
+		var passObject = GameObject.Find ("passingObject");
+		var helpScript = passObject.GetComponent<menuHelper>();
+		int numNPC = helpScript.numNPC;
 		NPC to_kill = npc.gameObject.GetComponent<NPC>();
 		to_kill.TakeDamage (100);
-		hunger_bar.increaseBy(0.05f);
+		hunger_bar.increaseBy(1f/numNPC);
 	}
 
 
