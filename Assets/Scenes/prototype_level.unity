@@ -672,6 +672,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   ntr: {fileID: 0}
   transformed: 0
+  transformSound: {fileID: 8300000, guid: 21e7f02920f45e84ea934930dc57023d, type: 3}
+  attackSound: {fileID: 8300000, guid: 020097e01bcb6f74ca09c2fd3f5d49e7, type: 3}
 --- !u!61 &1412476052
 BoxCollider2D:
   m_ObjectHideFlags: 0

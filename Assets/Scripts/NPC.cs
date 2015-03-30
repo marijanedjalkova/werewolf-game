@@ -204,7 +204,7 @@ public class NPC : MonoBehaviour {
 	}
 	void AttackPlayer(){
 
-		if (currentCooldown >= 0.2){
+		if (currentCooldown >= 0.1){
 			anim.SetBool ("NPCAttack", false);
 		}
 

@@ -147,9 +147,9 @@ MonoBehaviour:
   deadNPC: {fileID: 100000, guid: 952cd813b0cbd9b4299182c3fd57690f, type: 2}
   player: {fileID: 0}
   velocity: {x: 0, y: 0}
-  baseSpeed: 3.33333325
+  baseSpeed: 3
   alertRadius: 3
-  attackRadius: 2
+  attackRadius: .75
   suspicionIncreaseRate: .00999999978
   chanceToChangeRooms: .100000001
   wanderChance: .5

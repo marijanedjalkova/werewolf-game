@@ -15,7 +15,7 @@ TagManager:
   User Layer 8: NPC
   User Layer 9: Player
   User Layer 10: Silver
-  User Layer 11: 
+  User Layer 11: Body
   User Layer 12: 
   User Layer 13: 
   User Layer 14: 
@@ -48,4 +48,8 @@ TagManager:
   - name: Foreground
     userID: 2
     uniqueID: 2119637975
+    locked: 0
+  - name: Body
+    userID: 3
+    uniqueID: 2195130907
     locked: 0

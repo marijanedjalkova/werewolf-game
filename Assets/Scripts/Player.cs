@@ -18,6 +18,9 @@ public class Player : MonoBehaviour {
 	public NorthTrigger ntr;
 
 	public bool transformed = false;
+	public AudioClip transformSound;
+	public AudioClip attackSound;
+
 	private bool transformation_On_CD = false;
 	private int transform_Cooldown = 0;
 	private int TRANSFORM_CD_TIME = 100;
@@ -45,6 +48,7 @@ public class Player : MonoBehaviour {
 		//Transformation Code		
 		if (Input.GetKey (KeyCode.Space) && !transformation_On_CD) {
 			if(anim.GetBool("wolfForm") == false){
+				audio.clip = transformSound;
 				audio.Play ();
 				anim.SetBool ("wolfForm", true);
 				transformed = true;
@@ -110,6 +114,15 @@ public class Player : MonoBehaviour {
 			SilverDamage (silver);
 		}
 	}	
+
+	void Update(){
+
+		if (Input.GetKeyDown(KeyCode.Q) && transformed){
+			audio.clip = attackSound;
+			audio.Play ();
+		}
+
+	}
 
 	public Vector2 GetLocation(){
 		return new Vector2(this.transform.position.x, this.transform.position.y);
