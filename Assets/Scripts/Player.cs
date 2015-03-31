@@ -15,12 +15,13 @@ public class Player : MonoBehaviour {
 
 	public Animator anim;
 
-	public NorthTrigger ntr;
-
 	public bool transformed = false;
+	public AudioClip transformSound;
+	public AudioClip attackSound;
+
 	private bool transformation_On_CD = false;
-	private int transform_Cooldown = 0;
-	private int TRANSFORM_CD_TIME = 100;
+	private const float TRANSFORM_CD_TIME = 10f;
+	private float transform_Cooldown = 0f;
 
 	private bool player_Is_Swinging = false;
 	private int player_Swing_Display_Time = 5;
@@ -39,8 +40,8 @@ public class Player : MonoBehaviour {
 
 		//Transformation Cooldown Code
 		if(transformation_On_CD){
-			transform_Cooldown++;
-			if(transform_Cooldown == TRANSFORM_CD_TIME){
+			transform_Cooldown += Time.deltaTime;
+			if(transform_Cooldown >= TRANSFORM_CD_TIME){
 				transform_Cooldown = 0;
 				transformation_On_CD = false;
 			}
@@ -60,6 +61,8 @@ public class Player : MonoBehaviour {
 		//Transformation Code		
 		if (Input.GetKey (KeyCode.Space) && !transformation_On_CD) {
 			if(anim.GetBool("wolfForm") == false){
+				audio.clip = transformSound;
+				audio.Play ();
 				anim.SetBool ("wolfForm", true);
 				transformed = true;
 				transformation_On_CD = true;
@@ -75,7 +78,8 @@ public class Player : MonoBehaviour {
 
 			bool move = false; 
 			velocity = new Vector2(0.0f, 0.0f);
-		if(Input.GetKey(KeyCode.RightArrow)){
+
+		if(Input.GetKey(KeyCode.D) || Input.GetKey (KeyCode.RightArrow)){
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("down", false);
@@ -84,7 +88,9 @@ public class Player : MonoBehaviour {
 			velocity += new Vector2(playerSpeed, 0.0f);
 		}
 
-		if(Input.GetKey(KeyCode.LeftArrow)){
+
+		if(Input.GetKey(KeyCode.A) || Input.GetKey (KeyCode.LeftArrow)){
+
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("down", false);
@@ -92,7 +98,9 @@ public class Player : MonoBehaviour {
 			anim.SetBool ("left", true);
 			velocity -= new Vector2(playerSpeed, 0.0f);
 		}
-		if(Input.GetKey(KeyCode.UpArrow)){
+
+		if(Input.GetKey(KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
+
 			move = true;
 			anim.SetBool ("down", false);
 			anim.SetBool ("left", false);
@@ -100,7 +108,9 @@ public class Player : MonoBehaviour {
 			anim.SetBool ("up", true);
 			velocity += new Vector2( 0.0f, playerSpeed);
 		}
-		if(Input.GetKey(KeyCode.DownArrow)){
+
+		if(Input.GetKey(KeyCode.S) || Input.GetKey (KeyCode.DownArrow)){
+
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("left", false);
@@ -125,6 +135,17 @@ public class Player : MonoBehaviour {
 		}
 	}	
 
+	void Update(){
+
+		if (Input.GetKeyDown(KeyCode.Q) && transformed){
+
+			audio.clip = attackSound;
+			audio.Play ();
+
+		}
+
+	}
+
 	public Vector2 GetLocation(){
 		return new Vector2(this.transform.position.x, this.transform.position.y);
 	}
@@ -148,11 +169,16 @@ public class Player : MonoBehaviour {
 	}
 
 	public void kill(Collider2D npc){
-		NPC to_kill = npc.gameObject.GetComponent<NPC>();
+
+		GameObject passObject = GameObject.Find ("passingObject");
+		menuHelper helpScript = passObject.GetComponent<menuHelper> ();
+
+		int numNPC = helpScript.numNPC;
+		NPC to_kill = npc.gameObject.GetComponent<NPC> ();
 		to_kill.TakeDamage (100);
-		hunger_bar.increaseBy(0.05f);
 		player_Is_Swinging = true;
 		anim.SetBool ("PlayerAttack", true);
+		hunger_bar.increaseBy (1f / numNPC);
 
 	}
 

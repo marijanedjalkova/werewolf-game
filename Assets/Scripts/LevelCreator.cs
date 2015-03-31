@@ -19,6 +19,13 @@ public class LevelCreator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Pulls the 
+		var passObject = GameObject.Find ("passingObject");
+		var helpScript = passObject.GetComponent<menuHelper>();
+		int map = helpScript.numRooms;
+		int npc = helpScript.numNPC;
+		mapSize = map;
+		numberOfNPC = npc;
 		
 		GameObject tempTilemapObject = Instantiate(tilemapObject) as GameObject;
 		tilemap = tempTilemapObject.GetComponent<Tilemap>();
@@ -52,6 +59,8 @@ public class LevelCreator : MonoBehaviour {
 			Tile currentTile = tilemap.RandomStartNPC();
 			silverList[i].SetLocation(new Vector3(currentTile.x,currentTile.y,-1));
 		}
+
+		GameObject.FindObjectOfType<Music>().GetComponent<Music>().StartMusic();
 
 	}
 	// Update is called once per frame
