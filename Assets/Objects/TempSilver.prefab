@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 406180}
   - 212: {fileID: 21251010}
   - 114: {fileID: 11469654}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TempSilver
   m_TagString: Untagged
   m_Icon: {fileID: 0}

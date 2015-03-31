@@ -31,8 +31,8 @@ public class SuspicionBar : MonoBehaviour
 	void OnGUI() {
 		//draw the background:
 		pos = this.transform.position;
-		pos.x -= 0.75f;// get the game object position
-		pos.y += 1.0f;
+		pos.x -= 0.25f;// get the game object position
+		pos.y += 0.6f;
 		ViewportPoint = Camera.main.WorldToViewportPoint(pos);  //convert game object position to VievportPoint
 		
 		GUI.BeginGroup (new Rect (ViewportPoint.x*Camera.main.pixelWidth, Camera.main.pixelHeight - ViewportPoint.y*Camera.main.pixelHeight, size.x, size.y));
