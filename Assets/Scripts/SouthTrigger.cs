@@ -26,5 +26,6 @@ public class SouthTrigger : MonoBehaviour {
 				player.kill(other);
 			}
 		}
+
 	}
 }

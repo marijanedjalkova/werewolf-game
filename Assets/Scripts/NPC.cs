@@ -10,7 +10,9 @@ public class NPC : MonoBehaviour {
 	public float baseSpeed = 0.0f;
 	private float speed;
 
-	public float attackRadius = 2f;
+	public float alertRadius = 3f;
+	public float attackRadius = 1f;
+	public float suspicionIncreaseRate = 0.01f;
 	public float chanceToChangeRooms = 0f;
 	public float wanderChance = 0f;
 
@@ -25,6 +27,7 @@ public class NPC : MonoBehaviour {
 	public bool fighting = false;
 	public bool fleeing = false;
 
+	private float bravery = 0;
 	private int timeSinceLastSighting;
 	public SuspicionBar suspicion_bar;
 
@@ -46,6 +49,8 @@ public class NPC : MonoBehaviour {
 		anim.SetBool ("right", false);
 		anim.SetBool ("Move", false);
 
+		bravery = Random.Range (1.1f, 1.5f);
+
 		velocity = new Vector2 (0.0f, 0.0f);
 		currentPath = new List<Tile>();
 		speed = baseSpeed;
@@ -54,6 +59,9 @@ public class NPC : MonoBehaviour {
 	}
 
 	void Update(){
+
+		// INcrease suspicion
+		suspicion_bar.susp_level = Mathf.Min (1.0f, suspicion_bar.susp_level + suspicionIncreaseRate*Time.deltaTime);
 
 		currentCooldown = Mathf.Min(currentCooldown+ Time.deltaTime, 10);
 
@@ -135,8 +143,7 @@ public class NPC : MonoBehaviour {
 		
 		} else {
 
-			float x = 1.5f;
-			float chanceToFight = (x-1)/x;
+			float chanceToFight = (bravery-1)/bravery;
 			float outcome = Random.Range (0.0f, 1.0f);
 
 			if (outcome < chanceToFight){
@@ -199,19 +206,25 @@ public class NPC : MonoBehaviour {
 	}
 	void AttackPlayer(){
 
+		if (currentCooldown >= 0.1){
+			anim.SetBool ("NPCAttack", false);
+		}
+
+
+
 		if (player == null || currentCooldown <= attackCooldown){
 			return;
 		}
 
 		if ((player.GetLocation()-this.GetLocation ()).magnitude <= this.attackRadius){
 
+			audio.Play ();
 			currentCooldown = 0;
+			player.TakeDamage(0.1f);
 			anim.SetBool ("NPCAttack", true);
-			player.TakeDamage(10f);
 
 		}
-		else
-			anim.SetBool ("NPCAttack", false);
+
 	}
 
 	// Update is called once per frame
@@ -274,24 +287,21 @@ public class NPC : MonoBehaviour {
 					anim.SetBool ("left", false);
 					anim.SetBool ("up", false);
 					anim.SetBool ("down", false);
-
 				}
 			}
-			if(this.rigidbody2D.velocity.y >= 0.1 || this.rigidbody2D.velocity.y <= -0.1){
+			else if(this.rigidbody2D.velocity.y >= 0.1 || this.rigidbody2D.velocity.y <= -0.1){
 				anim.SetBool ("Move", true);
-				if(this.rigidbody2D.velocity.y > 0){
-					anim.SetBool ("up", true);
-					anim.SetBool ("down", false);
-					anim.SetBool ("right", false);
-					anim.SetBool ("left", false);
-
-				}
-				else if(this.rigidbody2D.velocity.y < 0){
-					anim.SetBool ("down", true);
+				if(this.rigidbody2D.velocity.y < 0){
 					anim.SetBool ("up", false);
+					anim.SetBool ("down", true);
 					anim.SetBool ("right", false);
 					anim.SetBool ("left", false);
-
+				}
+				else if(this.rigidbody2D.velocity.y > 0){
+					anim.SetBool ("down", false);
+					anim.SetBool ("up", true);
+					anim.SetBool ("right", false);
+					anim.SetBool ("left", false);
 				}
 			}
 			else{
@@ -303,12 +313,12 @@ public class NPC : MonoBehaviour {
 
 	void AlertNPCS(){
 
-		if (this.suspicion_bar.get_suspicion() >= 0.9f){
+		if (this.suspicion_bar.get_suspicion() >= 1f){
 
 			NPC[] npcs = FindObjectsOfType(typeof(NPC)) as NPC[];
 			foreach(NPC npc in npcs){
 
-				if ((npc.transform.position - this.transform.position).magnitude < 6){
+				if ((npc.transform.position - this.transform.position).magnitude < alertRadius){
 
 					npc.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
 					this.suspicion_bar.set_suspicion(Mathf.Max (this.suspicion_bar.get_suspicion(), npc.suspicion_bar.get_suspicion()));
@@ -332,7 +342,7 @@ public class NPC : MonoBehaviour {
 		
 		if ((new Vector2(player.transform.position.x, player.transform.position.y) - hit.point).magnitude <= 1){
 
-			if (player.transformed || this.suspicion_bar.get_suspicion() >= 0.9f){
+			if (player.transformed || this.suspicion_bar.get_suspicion() >= 1f){
 				return true;
 			}
 		}

@@ -20,12 +20,13 @@ public class WestTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		if(Input.GetKey(KeyCode.Q)&& player.anim.GetBool("right")){
+		if(Input.GetKey(KeyCode.Q)&& player.anim.GetBool("left")){
 			Debug.Log("KILLING WEST");
 			if (other.gameObject.name == "NPC(Clone)" && player.transformed){
 				player.kill(other);
 			}
 		}
+
 	}
 
 

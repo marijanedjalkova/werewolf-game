@@ -30,6 +30,7 @@ public class NorthTrigger : MonoBehaviour {
 				player.hunger_bar.increaseBy(0.05f);
 			}
 		}
+
 	}
 
 	void OnTriggerStay2D(Collider2D other){

@@ -20,11 +20,12 @@ public class EastTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		if(Input.GetKey(KeyCode.Q)&& player.anim.GetBool("left")){
+		if(Input.GetKey(KeyCode.Q)&& player.anim.GetBool("right")){
 			Debug.Log("KILLING EAST");
 			if (other.gameObject.name == "NPC(Clone)" && player.transformed){
 				player.kill(other);
 			}
 		}
+
 	}
 }
