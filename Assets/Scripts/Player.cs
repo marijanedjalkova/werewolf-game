@@ -23,6 +23,9 @@ public class Player : MonoBehaviour {
 	private const float TRANSFORM_CD_TIME = 10f;
 	private float transform_Cooldown = 0f;
 
+	private bool player_Is_Swinging = false;
+	private int player_Swing_Display_Time = 5;
+
 	void Start(){
 		anim = GetComponent<Animator> ();
 		anim.SetBool ("wolfForm", false);
@@ -43,6 +46,18 @@ public class Player : MonoBehaviour {
 				transformation_On_CD = false;
 			}
 		}
+
+		//Player Swinging Code 
+		if (player_Is_Swinging = true) {
+
+			player_Swing_Display_Time--;
+			if(player_Swing_Display_Time == 0){
+				anim.SetBool ("PlayerAttack", false);
+				player_Is_Swinging = false;
+				player_Swing_Display_Time = 5;
+			}
+		}
+
 		//Transformation Code		
 		if (Input.GetKey (KeyCode.Space) && !transformation_On_CD) {
 			if(anim.GetBool("wolfForm") == false){
@@ -63,6 +78,7 @@ public class Player : MonoBehaviour {
 
 			bool move = false; 
 			velocity = new Vector2(0.0f, 0.0f);
+
 		if(Input.GetKey(KeyCode.D) || Input.GetKey (KeyCode.RightArrow)){
 			move = true;
 			anim.SetBool ("up", false);
@@ -72,7 +88,9 @@ public class Player : MonoBehaviour {
 			velocity += new Vector2(playerSpeed, 0.0f);
 		}
 
+
 		if(Input.GetKey(KeyCode.A) || Input.GetKey (KeyCode.LeftArrow)){
+
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("down", false);
@@ -80,7 +98,9 @@ public class Player : MonoBehaviour {
 			anim.SetBool ("left", true);
 			velocity -= new Vector2(playerSpeed, 0.0f);
 		}
+
 		if(Input.GetKey(KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
+
 			move = true;
 			anim.SetBool ("down", false);
 			anim.SetBool ("left", false);
@@ -88,7 +108,9 @@ public class Player : MonoBehaviour {
 			anim.SetBool ("up", true);
 			velocity += new Vector2( 0.0f, playerSpeed);
 		}
+
 		if(Input.GetKey(KeyCode.S) || Input.GetKey (KeyCode.DownArrow)){
+
 			move = true;
 			anim.SetBool ("up", false);
 			anim.SetBool ("left", false);
@@ -136,13 +158,14 @@ public class Player : MonoBehaviour {
 			RaycastHit2D hit = Physics2D.Raycast(new Vector2(npc.transform.position.x, npc.transform.position.y),
 			                                     new Vector2(this.transform.position.x, this.transform.position.y)-
 			                                     new Vector2(npc.transform.position.x, npc.transform.position.y));
-			
+				
 			if ((new Vector2(this.transform.position.x, this.transform.position.y) - hit.point).magnitude <= 1){
 				npc.suspicion_bar.set_suspicion(1.0f);
 
 			}
 
 		}
+
 	}
 
 	public void kill(Collider2D npc){
@@ -153,6 +176,8 @@ public class Player : MonoBehaviour {
 		int numNPC = helpScript.numNPC;
 		NPC to_kill = npc.gameObject.GetComponent<NPC> ();
 		to_kill.TakeDamage (100);
+		player_Is_Swinging = true;
+		anim.SetBool ("PlayerAttack", true);
 		hunger_bar.increaseBy (1f / numNPC);
 
 	}
