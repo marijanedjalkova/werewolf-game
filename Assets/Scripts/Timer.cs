@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Timer : MonoBehaviour {
 
-	float timeRemaining = 10;
+	float timeRemaining = 100;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour {
 		if (timeRemaining > 0) {
 			GUIStyle myLabelStyle = new GUIStyle(GUI.skin.label);
 			myLabelStyle.fontSize = 24;
-			GUI.Label(new Rect (10, 80, 200, 100), "Remaining: "+ (int)timeRemaining, myLabelStyle);
+			GUI.Label(new Rect (10, 80, 200, 100), "Time left: "+ (int)timeRemaining, myLabelStyle);
 		} else {
 			Application.LoadLevel("lost_level");
 		}

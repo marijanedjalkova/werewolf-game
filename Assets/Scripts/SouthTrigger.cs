@@ -27,4 +27,13 @@ public class SouthTrigger : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnTriggerStay2D(Collider2D other){
+		if(Input.GetKey(KeyCode.Q)&& player.anim.GetBool("down")){
+			Debug.Log("KILLING SOUTH");
+			if (other.gameObject.name == "NPC(Clone)" && player.transformed){
+				player.kill(other);
+			}
+		}
+	}
 }

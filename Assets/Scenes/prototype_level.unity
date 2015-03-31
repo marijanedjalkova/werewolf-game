@@ -287,7 +287,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .529999971, y: 1}
+  m_Size: {x: .529999971, y: 2}
   m_Center: {x: 0, y: 0}
 --- !u!212 &238065429
 SpriteRenderer:
@@ -482,7 +482,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .529999971, y: 1}
+  m_Size: {x: .529999971, y: 2}
   m_Center: {x: 0, y: 0}
 --- !u!212 &719124619
 SpriteRenderer:
@@ -645,7 +645,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 1, y: .829999983}
+  m_Size: {x: 5, y: 5}
   m_Center: {x: 0, y: 0}
 --- !u!212 &948525631
 SpriteRenderer:
@@ -668,7 +668,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: .117647052, b: .117647052, a: 1}
 --- !u!4 &948525632
 Transform:
   m_ObjectHideFlags: 0
@@ -732,7 +732,6 @@ MonoBehaviour:
   health_bar: {fileID: 4553219}
   health: 100
   anim: {fileID: 0}
-  ntr: {fileID: 0}
   transformed: 0
   transformSound: {fileID: 8300000, guid: 21e7f02920f45e84ea934930dc57023d, type: 3}
   attackSound: {fileID: 8300000, guid: 020097e01bcb6f74ca09c2fd3f5d49e7, type: 3}
@@ -914,7 +913,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 1, y: .829999983}
+  m_Size: {x: 2, y: 2}
   m_Center: {x: 0, y: 0}
 --- !u!212 &1488194018
 SpriteRenderer:

@@ -15,8 +15,6 @@ public class Player : MonoBehaviour {
 
 	public Animator anim;
 
-	public NorthTrigger ntr;
-
 	public bool transformed = false;
 	public AudioClip transformSound;
 	public AudioClip attackSound;
