@@ -19,14 +19,14 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
-    - time: .166666672
+    - time: .100000001
       value: {fileID: 21300002, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
-    - time: .333333343
+    - time: .183333337
       value: {fileID: 21300004, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
-    - time: .5
+    - time: .266666681
       value: {fileID: 21300006, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
-    - time: .666666687
-      value: {fileID: 21300004, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
+    - time: .349999994
+      value: {fileID: 21300000, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -49,11 +49,11 @@ AnimationClip:
     - {fileID: 21300002, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
     - {fileID: 21300004, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
     - {fileID: 21300006, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
-    - {fileID: 21300004, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
+    - {fileID: 21300000, guid: b8c8254a9654bfa439ff1659ad0e56e6, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: .683333337
+    m_StopTime: .366666675
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
