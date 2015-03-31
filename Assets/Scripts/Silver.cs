@@ -12,7 +12,7 @@ public class Silver : MonoBehaviour {
 	void Update () {
 		var health = GameObject.Find ("Health");
 		var player = GameObject.Find ("Player");
-		float distance = Vector3.Distance (player.transform.position, this.transform.position);
+		float distance = Vector2.Distance (player.transform.position, this.transform.position);
 		var healthScript = health.GetComponent<Health>();
 		var playerScript = player.GetComponent<Player>();
 
