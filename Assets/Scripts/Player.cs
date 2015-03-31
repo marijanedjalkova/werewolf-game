@@ -20,8 +20,8 @@ public class Player : MonoBehaviour {
 	public AudioClip attackSound;
 
 	private bool transformation_On_CD = false;
-	private int transform_Cooldown = 0;
-	private int TRANSFORM_CD_TIME = 100;
+	private const float TRANSFORM_CD_TIME = 10f;
+	private float transform_Cooldown = 0f;
 
 	void Start(){
 		anim = GetComponent<Animator> ();
@@ -37,8 +37,8 @@ public class Player : MonoBehaviour {
 
 		//Transformation Cooldown Code
 		if(transformation_On_CD){
-			transform_Cooldown++;
-			if(transform_Cooldown == TRANSFORM_CD_TIME){
+			transform_Cooldown += Time.deltaTime;
+			if(transform_Cooldown >= TRANSFORM_CD_TIME){
 				transform_Cooldown = 0;
 				transformation_On_CD = false;
 			}
@@ -116,8 +116,10 @@ public class Player : MonoBehaviour {
 	void Update(){
 
 		if (Input.GetKeyDown(KeyCode.Q) && transformed){
+
 			audio.clip = attackSound;
 			audio.Play ();
+
 		}
 
 	}
@@ -144,12 +146,15 @@ public class Player : MonoBehaviour {
 	}
 
 	public void kill(Collider2D npc){
-		var passObject = GameObject.Find ("passingObject");
-		var helpScript = passObject.GetComponent<menuHelper>();
+
+		GameObject passObject = GameObject.Find ("passingObject");
+		menuHelper helpScript = passObject.GetComponent<menuHelper> ();
+
 		int numNPC = helpScript.numNPC;
-		NPC to_kill = npc.gameObject.GetComponent<NPC>();
+		NPC to_kill = npc.gameObject.GetComponent<NPC> ();
 		to_kill.TakeDamage (100);
-		hunger_bar.increaseBy(1f/numNPC);
+		hunger_bar.increaseBy (1f / numNPC);
+
 	}
 
 

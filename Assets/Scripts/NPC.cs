@@ -27,6 +27,7 @@ public class NPC : MonoBehaviour {
 	public bool fighting = false;
 	public bool fleeing = false;
 
+	private float bravery = 0;
 	private int timeSinceLastSighting;
 	public SuspicionBar suspicion_bar;
 
@@ -47,6 +48,8 @@ public class NPC : MonoBehaviour {
 		anim.SetBool ("left", false);
 		anim.SetBool ("right", false);
 		anim.SetBool ("Move", false);
+
+		bravery = Random.Range (1.1f, 1.5f);
 
 		velocity = new Vector2 (0.0f, 0.0f);
 		currentPath = new List<Tile>();
@@ -140,8 +143,7 @@ public class NPC : MonoBehaviour {
 		
 		} else {
 
-			float x = 1.5f;
-			float chanceToFight = (x-1)/x;
+			float chanceToFight = (bravery-1)/bravery;
 			float outcome = Random.Range (0.0f, 1.0f);
 
 			if (outcome < chanceToFight){

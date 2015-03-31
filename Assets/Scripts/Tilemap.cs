@@ -405,7 +405,7 @@ public class Tilemap : MonoBehaviour {
 	}
 
 	public Vector3 RandomStartPlayer(){
-		return new Vector3(rooms[0].GetCentre ().x, rooms[0].GetCentre ().y, -1);
+		return new Vector3(rooms[0].GetCentre ().x, rooms[0].GetCentre ().y, -3);
 	}
 
 	public Tile RandomStartNPC(){
