@@ -287,7 +287,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .529999971, y: 2}
+  m_Size: {x: 1, y: .5}
   m_Center: {x: 0, y: 0}
 --- !u!212 &238065429
 SpriteRenderer:
@@ -482,7 +482,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: .529999971, y: 2}
+  m_Size: {x: 1, y: .5}
   m_Center: {x: 0, y: 0}
 --- !u!212 &719124619
 SpriteRenderer:
@@ -513,7 +513,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 719124616}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0399999991, y: .0900000036, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -629,7 +629,7 @@ GameObject:
   - 212: {fileID: 948525631}
   - 61: {fileID: 948525630}
   - 114: {fileID: 948525633}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: West Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -645,7 +645,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 5, y: 5}
+  m_Size: {x: .5, y: 1}
   m_Center: {x: 0, y: 0}
 --- !u!212 &948525631
 SpriteRenderer:
@@ -897,7 +897,7 @@ GameObject:
   - 212: {fileID: 1488194018}
   - 61: {fileID: 1488194017}
   - 114: {fileID: 1488194020}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: East Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -913,7 +913,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: .5, y: 1}
   m_Center: {x: 0, y: 0}
 --- !u!212 &1488194018
 SpriteRenderer:
