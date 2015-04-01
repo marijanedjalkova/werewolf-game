@@ -23,8 +23,8 @@ public class Player : MonoBehaviour {
 	private const float TRANSFORM_CD_TIME = 10f;
 	private float transform_Cooldown = 0f;
 
-	private bool player_Is_Swinging = false;
-	private int player_Swing_Display_Time = 5;
+
+	private float attackCoolDown;
 
 	void Start(){
 		anim = GetComponent<Animator> ();
@@ -47,16 +47,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		//Player Swinging Code 
-		if (player_Is_Swinging = true) {
 
-			player_Swing_Display_Time--;
-			if(player_Swing_Display_Time == 0){
-				anim.SetBool ("PlayerAttack", false);
-				player_Is_Swinging = false;
-				player_Swing_Display_Time = 5;
-			}
-		}
 
 		//Transformation Code		
 		if (Input.GetKey (KeyCode.Space) && !transformation_On_CD) {
@@ -136,12 +127,16 @@ public class Player : MonoBehaviour {
 	}	
 
 	void Update(){
+		attackCoolDown += Time.deltaTime;
 
+		if (attackCoolDown >= 0.1) {
+			anim.SetBool ("PlayerAttack", false);
+		}
 		if (Input.GetKeyDown(KeyCode.Q) && transformed){
-
+			attackCoolDown = 0;
 			audio.clip = attackSound;
 			audio.Play ();
-
+			anim.SetBool ("PlayerAttack", true);
 		}
 
 	}
@@ -176,8 +171,8 @@ public class Player : MonoBehaviour {
 		int numNPC = helpScript.numNPC;
 		NPC to_kill = npc.gameObject.GetComponent<NPC> ();
 		to_kill.TakeDamage (100);
-		player_Is_Swinging = true;
-		anim.SetBool ("PlayerAttack", true);
+
+
 		hunger_bar.increaseBy (1f / numNPC);
 
 	}
