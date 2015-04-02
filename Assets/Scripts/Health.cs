@@ -14,6 +14,9 @@ public class Health : MonoBehaviour
 
 	public void increaseBy(float value){
 		current_health += value;
+		if (current_health > 1f) {
+			current_health = 1;
+		}
 	}
 
 

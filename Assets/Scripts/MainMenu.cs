@@ -6,8 +6,8 @@ public class MainMenu : MonoBehaviour {
 	public static int numRooms;
 	public static int numNPC;
 
-	string numRoomsString = "10";
-	string numNPCString = "25";
+	string numRoomsString = "5";
+	string numNPCString = "15";
 
 	void OnGUI(){
 		var passObject = GameObject.Find ("passingObject");
