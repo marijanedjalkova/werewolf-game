@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
 	public AudioClip attackSound;
 
 	private bool transformation_On_CD = false;
-	private const float TRANSFORM_CD_TIME = 10f;
+	private const float TRANSFORM_CD_TIME = 5f;
 	private float transform_Cooldown = 0f;
 
 
@@ -174,6 +174,7 @@ public class Player : MonoBehaviour {
 
 
 		hunger_bar.increaseBy (1f / numNPC);
+		HealPlayer (0.1f);
 
 	}
 
@@ -183,6 +184,14 @@ public class Player : MonoBehaviour {
 		this.health -= damageAmount;
 		if (this.health <= 0f){
 			health = 0f;
+		}
+	}
+
+	public void HealPlayer(float healAmount){
+		health_bar.increaseBy (healAmount);
+		this.health += healAmount;
+		if (this.health >= 1f){
+			health = 1f;
 		}
 	}
 
